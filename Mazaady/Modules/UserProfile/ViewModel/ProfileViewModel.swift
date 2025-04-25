@@ -12,7 +12,14 @@ class ProfileViewModel: ObservableObject {
     @Published private(set) var profile: ProfileEntity?
     @Published private(set) var isLoading: Bool = false
     @Published private(set) var errorMessage: String?
+    @Published var selectedTab: SelectedTab = .products
 
+    enum SelectedTab {
+        case products
+        case reviews
+        case followers
+    }
+    
     private let useCase: UserProfileUseCase
 
     init(useCase: UserProfileUseCase) {
@@ -37,5 +44,9 @@ class ProfileViewModel: ObservableObject {
                 }
             }
         }
+    }
+    
+    func selectTab(_ tab: SelectedTab) {
+        selectedTab = tab
     }
 }

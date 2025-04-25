@@ -13,9 +13,17 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ProfileViewController" customModule="Mazaady" customModuleProvider="target">
             <connections>
                 <outlet property="changeLanguageLabel" destination="wx4-cl-vMi" id="4F7-yK-KDu"/>
+                <outlet property="followersButtonLabel" destination="msb-zc-Uo2" id="5As-XT-EPs"/>
+                <outlet property="followersLabel" destination="LYc-Z4-ewM" id="eNk-HC-toT"/>
+                <outlet property="followersLine" destination="gZV-Oj-PPJ" id="O2U-Vi-Tof"/>
+                <outlet property="followingLabel" destination="Egl-6j-iPc" id="U3U-Gf-pZR"/>
+                <outlet property="productLabel" destination="mNV-Na-zCt" id="dUg-lp-RTL"/>
+                <outlet property="productLine" destination="cFm-bK-wp5" id="jNj-DT-fGK"/>
                 <outlet property="progressView" destination="XBw-fg-qfJ" id="XcM-by-Kga"/>
-                <outlet property="userFollowers" destination="oq7-V1-kpF" id="PdM-m0-beR"/>
-                <outlet property="userFollowing" destination="hIK-PK-0Go" id="ZEV-7T-z41"/>
+                <outlet property="reviewLabel" destination="AVb-cy-rmr" id="cvP-OL-aTf"/>
+                <outlet property="reviewLine" destination="ojO-Xf-ELa" id="FzL-4s-lqJ"/>
+                <outlet property="userFollowersCount" destination="oq7-V1-kpF" id="hnR-Gm-MGz"/>
+                <outlet property="userFollowingCount" destination="hIK-PK-0Go" id="rDr-vw-xev"/>
                 <outlet property="userProfileCity" destination="n61-jN-hI0" id="f1b-ur-cqG"/>
                 <outlet property="userProfileImage" destination="Mde-IL-FHe" id="Cng-oe-M52"/>
                 <outlet property="userProfileName" destination="l2k-YZ-uJt" id="eWy-bz-b89"/>
@@ -377,7 +385,7 @@
                 <constraint firstItem="NGi-V2-PRt" firstAttribute="bottom" secondItem="i5M-Pr-FkT" secondAttribute="bottom" id="sS7-i2-irG"/>
                 <constraint firstItem="NGi-V2-PRt" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="xVa-ay-xwl"/>
             </constraints>
-            <point key="canvasLocation" x="-59" y="-11"/>
+            <point key="canvasLocation" x="-60.305343511450381" y="-11.267605633802818"/>
         </view>
     </objects>
     <resources>

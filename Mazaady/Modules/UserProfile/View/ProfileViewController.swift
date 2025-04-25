@@ -10,15 +10,29 @@ import Kingfisher
 import Combine
 
 class ProfileViewController: UIViewController {
+    // MARK: - Outlets
+    // User Info
     @IBOutlet weak var userProfileImage: UIImageView!
     @IBOutlet weak var userProfileName: UILabel!
     @IBOutlet weak var userProfileUserName: UILabel!
     @IBOutlet weak var userProfileCity: UILabel!
-    @IBOutlet weak var userFollowing: UILabel!
-    @IBOutlet weak var userFollowers: UILabel!
+    @IBOutlet weak var userFollowingCount: UILabel!
+    @IBOutlet weak var userFollowersCount: UILabel!
+    // Loading
     @IBOutlet weak var progressView: UIActivityIndicatorView!
+    // Language
     @IBOutlet weak var changeLanguageLabel: UIButton!
+    // Tabs
+    @IBOutlet weak var followingLabel: UILabel!
+    @IBOutlet weak var followersLabel: UILabel!
+    @IBOutlet weak var productLabel: UILabel!
+    @IBOutlet weak var productLine: UIView!
+    @IBOutlet weak var reviewLabel: UILabel!
+    @IBOutlet weak var reviewLine: UIView!
+    @IBOutlet weak var followersButtonLabel: UILabel!
+    @IBOutlet weak var followersLine: UIView!
     
+    // MARK: - Properties
     private var cancellables: Set<AnyCancellable> = []
     let viewModel: ProfileViewModel
     
@@ -36,8 +50,9 @@ class ProfileViewController: UIViewController {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         setupBindings()
         configureUI()
+        setupTapGestures()
         viewModel.fetchProfile()
-        setupLanguageButton()
+        setupScreenLocalization()
     }
     
     private func setupBindings() {
@@ -65,12 +80,21 @@ class ProfileViewController: UIViewController {
                 }
             }
             .store(in: &cancellables)
+        
+        viewModel.$selectedTab
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] selectedTab in
+                self?.updateTabAppearance(for: selectedTab)
+            }
+            .store(in: &cancellables)
     }
     
     private func configureUI() {
         userProfileImage.layer.cornerRadius = 18
         userProfileImage.clipsToBounds = true
         progressView.hidesWhenStopped = true
+        
+        updateTabAppearance(for: .products)
     }
     
     private func updateUI(with profile: ProfileEntity) {
@@ -88,9 +112,64 @@ class ProfileViewController: UIViewController {
         userProfileName.text = profile.name
         userProfileUserName.text = "@\(profile.userName)"
         userProfileCity.text = profile.countryName + "," + profile.cityName
-        userFollowing.text = "\(profile.followingCount)"
-        userFollowers.text = "\(profile.followersCount)"
+        userFollowingCount.text = "\(profile.followingCount)"
+        userFollowersCount.text = "\(profile.followersCount)"
     }
+    
+    private func setupScreenLocalization() {
+        changeLanguageLabel.setTitle(NSLocalizedString("English", comment: ""), for: .normal)
+        followersLabel.text = NSLocalizedString("Followers", comment: "")
+        followingLabel.text = NSLocalizedString("Following", comment: "")
+        productLabel.text = NSLocalizedString("Products", comment: "")
+        reviewLabel.text = NSLocalizedString("Reviews", comment: "")
+        followersButtonLabel.text = NSLocalizedString("Followers", comment: "")
+    }
+    
+    private func setupTapGestures() {
+        let productTap = UITapGestureRecognizer(target: self, action: #selector(productTabTapped))
+        productLabel.isUserInteractionEnabled = true
+        productLabel.addGestureRecognizer(productTap)
+        
+        let reviewTap = UITapGestureRecognizer(target: self, action: #selector(reviewTabTapped))
+        reviewLabel.isUserInteractionEnabled = true
+        reviewLabel.addGestureRecognizer(reviewTap)
+        
+        let followersTap = UITapGestureRecognizer(target: self, action: #selector(followersTabTapped))
+        followersButtonLabel.isUserInteractionEnabled = true
+        followersButtonLabel.addGestureRecognizer(followersTap)
+    }
+    
+    private func updateTabAppearance(for selectedTab: ProfileViewModel.SelectedTab) {
+        resetAllTabs()
+        
+        switch selectedTab {
+        case .products:
+            productLabel.textColor = UIColor(named: "Pink100")
+            productLine.isHidden = false
+            
+        case .reviews:
+            reviewLabel.textColor = UIColor(named: "Pink100")
+            reviewLine.isHidden = false
+            
+        case .followers:
+            followersButtonLabel.textColor = UIColor(named: "Pink100")
+            followersLine.isHidden = false
+        }
+    }
+    
+    private func resetAllTabs() {
+        let defaultTextColor = UIColor(named: "Gray80") ?? .gray
+        
+        productLabel.textColor = defaultTextColor
+        productLine.isHidden = true
+        
+        reviewLabel.textColor = defaultTextColor
+        reviewLine.isHidden = true
+        
+        followersButtonLabel.textColor = defaultTextColor
+        followersLine.isHidden = true
+    }
+    
     
     private func showError(message: String) {
         let alert = UIAlertController(
@@ -102,9 +181,17 @@ class ProfileViewController: UIViewController {
         present(alert, animated: true)
     }
     
-    private func setupLanguageButton() {
-        // Set appropriate title for the button
-        changeLanguageLabel.setTitle(NSLocalizedString("English", comment: ""), for: .normal)
+    // MARK: - Actions
+    @objc private func productTabTapped() {
+        viewModel.selectTab(.products)
+    }
+    
+    @objc private func reviewTabTapped() {
+        viewModel.selectTab(.reviews)
+    }
+    
+    @objc private func followersTabTapped() {
+        viewModel.selectTab(.followers)
     }
     
     @IBAction func changeLanguageButton(_ sender: Any) {
