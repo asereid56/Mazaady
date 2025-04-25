@@ -16,7 +16,7 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         self.delegate = self
         setupTabBar()
         setupTabs()
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.styleMiddleTab(selected: false)
         }
@@ -51,15 +51,15 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         cartVC.view.backgroundColor = .white
         cartVC.tabBarItem = UITabBarItem(title: "Cart", image: UIImage(named: "bag"), tag: 3)
         
-        let profileVC = ProfileScreen()
+        let profileVC = ProfileViewController()
         profileVC.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.fill"), tag: 4)
         
         viewControllers = [
-            UINavigationController(rootViewController: homeVC),
-            UINavigationController(rootViewController: searchVC),
-            UINavigationController(rootViewController: storeVC),
-            UINavigationController(rootViewController: cartVC),
-            UINavigationController(rootViewController: profileVC)
+            homeVC,
+            searchVC,
+            storeVC,
+            cartVC,
+            profileVC
         ]
     }
     
