@@ -20,6 +20,7 @@ class ProfileViewModel: ObservableObject {
             }
         }
     }
+    private var productsFetched = false
     
     enum SelectedTab {
         case products
@@ -57,6 +58,7 @@ class ProfileViewModel: ObservableObject {
     }
     
     func fetchProducts() {
+        guard !productsFetched else { return }
         isLoading = true
         errorMessage = nil
         
@@ -71,6 +73,7 @@ class ProfileViewModel: ObservableObject {
                 case .success(let products):
                      self.products = products
                     print("Asooor \(products)")
+                    self.productsFetched = true 
                 case .failure(let error):
                     self.errorMessage = error.localizedDescription
                     
