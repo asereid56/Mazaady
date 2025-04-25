@@ -51,7 +51,9 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         cartVC.view.backgroundColor = .white
         cartVC.tabBarItem = UITabBarItem(title: "Cart", image: UIImage(named: "bag"), tag: 3)
         
-        let profileVC = ProfileViewController()
+        let userProfileUseCase = UserProfileUseCase()
+        let profileViewModel = ProfileViewModel(useCase: userProfileUseCase)
+        let profileVC = ProfileViewController(viewModel: profileViewModel)
         profileVC.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.fill"), tag: 4)
         
         viewControllers = [
