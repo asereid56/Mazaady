@@ -12,8 +12,11 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ProfileViewController" customModule="Mazaady" customModuleProvider="target">
             <connections>
+                <outlet property="adsTableView" destination="eF5-lY-nvp" id="hwS-40-6lL"/>
                 <outlet property="changeLanguageLabel" destination="wx4-cl-vMi" id="4F7-yK-KDu"/>
                 <outlet property="contentView" destination="1Of-yn-Bzv" id="OH5-9k-0U7"/>
+                <outlet property="emptyLabel" destination="Vqs-tJ-iWY" id="ZWn-eb-Xfh"/>
+                <outlet property="emptyView" destination="ORf-Uk-8kh" id="Yjr-pa-HpE"/>
                 <outlet property="followersButtonLabel" destination="msb-zc-Uo2" id="5As-XT-EPs"/>
                 <outlet property="followersLabel" destination="LYc-Z4-ewM" id="eNk-HC-toT"/>
                 <outlet property="followersLine" destination="gZV-Oj-PPJ" id="O2U-Vi-Tof"/>
@@ -27,6 +30,7 @@
                 <outlet property="reviewLine" destination="ojO-Xf-ELa" id="FzL-4s-lqJ"/>
                 <outlet property="scrollView" destination="NGi-V2-PRt" id="6h5-f7-UZp"/>
                 <outlet property="stickyTabsContainer" destination="HoR-LW-u14" id="N7K-t7-SDb"/>
+                <outlet property="tagsCollectionView" destination="NmE-T3-EIL" id="Gjc-mC-rba"/>
                 <outlet property="userFollowersCount" destination="oq7-V1-kpF" id="hnR-Gm-MGz"/>
                 <outlet property="userFollowingCount" destination="hIK-PK-0Go" id="rDr-vw-xev"/>
                 <outlet property="userProfileCity" destination="n61-jN-hI0" id="f1b-ur-cqG"/>
@@ -131,7 +135,7 @@
                                                             </subviews>
                                                         </stackView>
                                                     </subviews>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    <color key="backgroundColor" name="Pink10"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="36" id="CXf-wg-iNY"/>
                                                         <constraint firstAttribute="bottom" secondItem="6v7-GC-RW2" secondAttribute="bottom" id="IM8-Kb-lhm"/>
@@ -171,7 +175,7 @@
                                                             </subviews>
                                                         </stackView>
                                                     </subviews>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    <color key="backgroundColor" name="Pink10"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="36" id="LIT-tm-e0i"/>
                                                         <constraint firstAttribute="trailing" secondItem="OuS-0N-Fnk" secondAttribute="trailing" id="PpM-f8-R3f"/>
@@ -184,6 +188,7 @@
                                                     </constraints>
                                                 </view>
                                             </subviews>
+                                            <color key="backgroundColor" name="Pink10"/>
                                         </stackView>
                                     </subviews>
                                 </stackView>
@@ -279,13 +284,13 @@
                                             <rect key="frame" x="0.0" y="0.0" width="361" height="128"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vqs-tJ-iWY">
-                                                    <rect key="frame" x="160" y="53.666666666666686" width="41.333333333333343" height="20.333333333333329"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <rect key="frame" x="155" y="52.000000000000057" width="51.333333333333343" height="24"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="128" id="EI6-jR-IEl"/>
                                                 <constraint firstItem="Vqs-tJ-iWY" firstAttribute="centerY" secondItem="ORf-Uk-8kh" secondAttribute="centerY" id="bqi-5x-GkL"/>
@@ -406,6 +411,9 @@
         </namedColor>
         <namedColor name="Gray10">
             <color red="0.6588235294117647" green="0.64313725490196083" blue="0.64313725490196083" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Pink10">
+            <color red="0.96470588235294119" green="0.95686274509803926" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="Pink100">
             <color red="0.82352941176470584" green="0.023529411764705882" blue="0.32549019607843138" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

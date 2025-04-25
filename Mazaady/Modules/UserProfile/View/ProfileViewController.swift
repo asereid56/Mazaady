@@ -33,7 +33,12 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var followersLine: UIView!
     
     @IBOutlet weak var productsCollectionView: UICollectionView!
+    @IBOutlet weak var adsTableView: UITableView!
+    @IBOutlet weak var tagsCollectionView: UICollectionView!
     
+    
+    @IBOutlet weak var emptyView: UIView!
+    @IBOutlet weak var emptyLabel: UILabel!
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var headerContainer: UIStackView!
@@ -71,13 +76,14 @@ class ProfileViewController: UIViewController {
         productsCollectionView.dataSource = self
         productsCollectionView.delegate = self
         productsCollectionView.isScrollEnabled = false
+        productsCollectionView.backgroundColor = .clear
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 16
         layout.minimumInteritemSpacing = 16
         let itemWidth = (view.frame.width - 48) / 2 // 2 columns with 16px spacing
-        layout.itemSize = CGSize(width: itemWidth, height: 280) // Adjust height as needed
+        layout.itemSize = CGSize(width: itemWidth, height: 350)
         productsCollectionView.collectionViewLayout = layout
     }
     
@@ -127,8 +133,12 @@ class ProfileViewController: UIViewController {
         userProfileImage.layer.cornerRadius = 18
         userProfileImage.clipsToBounds = true
         progressView.hidesWhenStopped = true
-        
+        contentView.backgroundColor = .pink10
+        adsTableView.backgroundColor = .clear
+        tagsCollectionView.backgroundColor = .clear
+        scrollView.backgroundColor = .pink10
         updateTabAppearance(for: .products)
+        viewModel.selectTab(.products)
     }
     
     private func updateUI(with profile: ProfileEntity) {
@@ -180,14 +190,28 @@ class ProfileViewController: UIViewController {
         case .products:
             productLabel.textColor = UIColor(named: "Pink100")
             productLine.isHidden = false
+            productsCollectionView.isHidden = false
+            emptyView.isHidden = true
+            adsTableView.isHidden = false
+            tagsCollectionView.isHidden = false
             
         case .reviews:
             reviewLabel.textColor = UIColor(named: "Pink100")
             reviewLine.isHidden = false
-            
+            productsCollectionView.isHidden = true
+            emptyView.isHidden = false
+            emptyLabel.text = NSLocalizedString("No Reviews Yet", comment: "")
+            adsTableView.isHidden = true
+            tagsCollectionView.isHidden = true
+
         case .followers:
             followersButtonLabel.textColor = UIColor(named: "Pink100")
             followersLine.isHidden = false
+            productsCollectionView.isHidden = true
+            emptyView.isHidden = false
+            emptyLabel.text = NSLocalizedString("No Followers Yet", comment: "")
+            adsTableView.isHidden = true
+            tagsCollectionView.isHidden = true
         }
     }
     

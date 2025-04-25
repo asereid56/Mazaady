@@ -22,6 +22,9 @@ class ProductCell: UICollectionViewCell {
     @IBOutlet weak var hourCount: UILabel!
     @IBOutlet weak var minuteLabel: UILabel!
     @IBOutlet weak var minuteCount: UILabel!
+    @IBOutlet weak var dayView: UIStackView!
+    @IBOutlet weak var hourView: UIStackView!
+    @IBOutlet weak var minuteView: UIStackView!
     
     
     override func awakeFromNib() {
@@ -42,6 +45,13 @@ class ProductCell: UICollectionViewCell {
         dayLabel.text = NSLocalizedString("D", comment: "")
         minuteLabel.text = NSLocalizedString("M", comment: "")
         hourLabel.text = NSLocalizedString("H", comment: "")
+        
+        dayView.layer.cornerRadius = 14
+        dayView.layer.masksToBounds = true
+        hourView.layer.cornerRadius = 14
+        hourView.layer.masksToBounds = true
+        minuteView.layer.cornerRadius = 14
+        minuteView.layer.masksToBounds = true
     }
     
     func configure(with product: ProductEntity) {
@@ -81,6 +91,9 @@ class ProductCell: UICollectionViewCell {
             hourCount.isHidden = false
             minuteLabel.isHidden = false
             minuteCount.isHidden = false
+            dayView.isHidden = false
+            hourView.isHidden = false
+            minuteView.isHidden = false
         } else {
             lotStartInLabel.isHidden = true
             dayLabel.isHidden = true
@@ -89,6 +102,9 @@ class ProductCell: UICollectionViewCell {
             hourCount.isHidden = true
             minuteLabel.isHidden = true
             minuteCount.isHidden = true
+            dayView.isHidden = true
+            hourView.isHidden = true
+            minuteView.isHidden = true
         }
     }
     
