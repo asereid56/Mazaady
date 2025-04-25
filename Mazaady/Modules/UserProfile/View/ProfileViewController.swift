@@ -70,6 +70,7 @@ class ProfileViewController: UIViewController {
         viewModel.fetchProfile()
         setupScreenLocalization()
         setupCollectionView()
+        setupTableView()
     }
     
     private func setupCollectionView() {
@@ -91,6 +92,19 @@ class ProfileViewController: UIViewController {
         prototypeCell = Bundle.main
             .loadNibNamed("ProductCell", owner: nil, options: nil)?
             .first as? ProductCell
+    }
+    
+    private func setupTableView() {
+        let nib = UINib(nibName: "advertisementCell", bundle: nil)
+        adsTableView.register(nib, forCellReuseIdentifier: "advertisementCell")
+        adsTableView.dataSource = self
+        adsTableView.delegate = self
+        adsTableView.rowHeight = 163
+        adsTableView.estimatedRowHeight = 163
+        adsTableView.separatorStyle = .none
+        adsTableView.backgroundColor = .clear
+        adsTableView.isScrollEnabled = false
+        adsTableView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
     }
     
     private func setupBindings() {
@@ -123,6 +137,7 @@ class ProfileViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] selectedTab in
                 self?.updateTabAppearance(for: selectedTab)
+                self?.updateContentViewHeight()
             }
             .store(in: &cancellables)
         
@@ -130,6 +145,14 @@ class ProfileViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.productsCollectionView.reloadData()
+                self?.updateContentViewHeight()
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$advertisements
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.adsTableView.reloadData()
                 self?.updateContentViewHeight()
             }
             .store(in: &cancellables)
@@ -197,6 +220,7 @@ class ProfileViewController: UIViewController {
             productLine.isHidden = false
             productsCollectionView.isHidden = false
             emptyView.isHidden = true
+            adsTableView.isHidden = false
             
         case .reviews:
             reviewLabel.textColor = UIColor(named: "Pink100")
@@ -204,6 +228,7 @@ class ProfileViewController: UIViewController {
             productsCollectionView.isHidden = true
             emptyView.isHidden = false
             emptyLabel.text = NSLocalizedString("No Reviews Yet", comment: "")
+            adsTableView.isHidden = true
 
         case .followers:
             followersButtonLabel.textColor = UIColor(named: "Pink100")
@@ -211,44 +236,49 @@ class ProfileViewController: UIViewController {
             productsCollectionView.isHidden = true
             emptyView.isHidden = false
             emptyLabel.text = NSLocalizedString("No Followers Yet", comment: "")
-        }
-    }
-    
-    private func updateContentView(for selectedTab: ProfileViewModel.SelectedTab) {
-        switch selectedTab {
-        case .products:
-            productsCollectionView.isHidden = false
-            // Hide other content views here
-            
-        case .reviews:
-            productsCollectionView.isHidden = true
-            contentView.layoutIfNeeded()
-            
-        case .followers:
-            productsCollectionView.isHidden = true
+            adsTableView.isHidden = true
+
         }
     }
     
     private func updateContentViewHeight() {
+        // Calculate Products Collection View Height
         productsCollectionView.layoutIfNeeded()
         let collectionHeight = productsCollectionView.contentSize.height
         
-        // Update collection view height constraint if exists
+        // Update collection view height constraint
         if let heightConstraint = productsCollectionView.constraints.first(where: { $0.firstAttribute == .height }) {
             heightConstraint.constant = collectionHeight
         } else {
             productsCollectionView.heightAnchor.constraint(equalToConstant: collectionHeight).isActive = true
         }
         
-        // Update content view height
+        // Calculate Ads Table View Height
+        let adsCount = viewModel.advertisements.count
+        let rowHeight: CGFloat = 147 + 16 // Cell height + padding
+        let adsHeight = CGFloat(adsCount) * rowHeight + adsTableView.contentInset.top + adsTableView.contentInset.bottom
+        
+        // Update ads table view height constraint
+        if let adsHeightConstraint = adsTableView.constraints.first(where: { $0.firstAttribute == .height }) {
+            adsHeightConstraint.constant = adsHeight
+        } else {
+            adsTableView.heightAnchor.constraint(equalToConstant: adsHeight).isActive = true
+        }
+        
+        // Calculate Total Content Height
         contentView.layoutIfNeeded()
-        let contentHeight = headerContainer.frame.height +
-                           stickyTabsContainer.frame.height +
-                           collectionHeight + 40 // Add padding
+        var contentHeight: CGFloat = headerContainer.frame.height +
+                                    stickyTabsContainer.frame.height
+        
+        if viewModel.selectedTab == .products {
+            contentHeight += adsHeight + collectionHeight + 40 // Add padding between sections
+        } else {
+            contentHeight += 40 // Empty view padding
+        }
+        
         contentView.frame.size.height = contentHeight
         scrollView.contentSize = contentView.frame.size
     }
-    
     
     private func resetAllTabs() {
         let defaultTextColor = UIColor(named: "Gray80") ?? .gray
@@ -335,5 +365,22 @@ extension ProfileViewController: WaterfallLayoutDelegate {
 
         prototypeCell.contentView.removeConstraint(widthConstraint)
         return height
+    }
+}
+
+extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.advertisements.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "advertisementCell", for: indexPath) as! advertisementCell
+        let ad = viewModel.advertisements[indexPath.row]
+        cell.advertismentCell.kf.setImage(with: URL(string: ad.image))
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 163
     }
 }

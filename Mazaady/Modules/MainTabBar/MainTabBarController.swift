@@ -52,7 +52,12 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         cartVC.tabBarItem = UITabBarItem(title: "Cart", image: UIImage(named: "bag"), tag: 3)
         
         let userProfileUseCase = UserProfileUseCase()
-        let profileViewModel = ProfileViewModel(useCase: userProfileUseCase, productUseCase: ProductUseCase())
+        let advertisingUseCase = AdvertisementUseCase()
+        let profileViewModel = ProfileViewModel(
+            userUseCase: userProfileUseCase,
+            productUseCase: ProductUseCase(),
+            advertismentUseCase: advertisingUseCase
+        )
         let profileVC = ProfileViewController(viewModel: profileViewModel)
         profileVC.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.fill"), tag: 4)
         
