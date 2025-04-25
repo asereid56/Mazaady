@@ -73,21 +73,24 @@ class ProfileViewController: UIViewController {
     }
     
     private func setupCollectionView() {
-        productsCollectionView.register(UINib(nibName: "ProductCell", bundle: nil), forCellWithReuseIdentifier: "ProductCell")
+        productsCollectionView.register(UINib(nibName: "ProductCell", bundle: nil),
+                                        forCellWithReuseIdentifier: "ProductCell")
         productsCollectionView.dataSource = self
         productsCollectionView.delegate = self
         productsCollectionView.isScrollEnabled = false
         productsCollectionView.backgroundColor = .clear
-        
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 16
-        layout.minimumInteritemSpacing = 16
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+
+        // Replace flow layout with our WaterfallLayout
+        let layout = WaterfallLayout()
+        layout.delegate = self
+        layout.numberOfColumns = 3
+        layout.cellPadding = 16
         productsCollectionView.collectionViewLayout = layout
-        
-        // Load prototype cell for size calculations
-        prototypeCell = Bundle.main.loadNibNamed("ProductCell", owner: nil, options: nil)?.first as? ProductCell
+
+        // Prototype cell for dynamic sizing
+        prototypeCell = Bundle.main
+            .loadNibNamed("ProductCell", owner: nil, options: nil)?
+            .first as? ProductCell
     }
     
     private func setupBindings() {
@@ -305,37 +308,32 @@ extension ProfileViewController: UICollectionViewDataSource, UICollectionViewDel
     }
 }
 
-extension ProfileViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let spacing: CGFloat = 16
-        let totalHorizontalInset: CGFloat = 16 * 2 // Left + Right insets
-        let numberOfItemsPerRow: CGFloat = 3
-        let availableWidth = collectionView.bounds.width - totalHorizontalInset - (numberOfItemsPerRow - 1) * spacing
-        let itemWidth = availableWidth / numberOfItemsPerRow
-        
+extension ProfileViewController: WaterfallLayoutDelegate {
+    func collectionView(_ collectionView: UICollectionView,
+                        heightForItemAt indexPath: IndexPath,
+                        withWidth itemWidth: CGFloat) -> CGFloat {
         guard let prototypeCell = prototypeCell else {
-            return CGSize(width: itemWidth, height: 100) // Fallback size
+            return 100
         }
-        
         let product = viewModel.products[indexPath.item]
         prototypeCell.configure(with: product)
+        
+        // Constrain width, then let Auto Layout compute fitting height
         prototypeCell.contentView.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Set width constraint
-        let widthConstraint = prototypeCell.contentView.widthAnchor.constraint(equalToConstant: itemWidth)
+        let widthConstraint = prototypeCell.contentView
+            .widthAnchor
+            .constraint(equalToConstant: itemWidth)
         prototypeCell.contentView.addConstraint(widthConstraint)
-        
-        // Calculate size
-        let targetSize = CGSize(width: itemWidth, height: UIView.layoutFittingCompressedSize.height)
+
+        let targetSize = CGSize(width: itemWidth,
+                                height: UIView.layoutFittingCompressedSize.height)
         let height = prototypeCell.contentView.systemLayoutSizeFitting(
             targetSize,
             withHorizontalFittingPriority: .required,
             verticalFittingPriority: .fittingSizeLevel
         ).height
-        
-        // Clean up constraint
+
         prototypeCell.contentView.removeConstraint(widthConstraint)
-        
-        return CGSize(width: itemWidth, height: height)
+        return height
     }
 }
