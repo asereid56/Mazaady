@@ -13,15 +13,20 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ProfileViewController" customModule="Mazaady" customModuleProvider="target">
             <connections>
                 <outlet property="changeLanguageLabel" destination="wx4-cl-vMi" id="4F7-yK-KDu"/>
+                <outlet property="contentView" destination="1Of-yn-Bzv" id="OH5-9k-0U7"/>
                 <outlet property="followersButtonLabel" destination="msb-zc-Uo2" id="5As-XT-EPs"/>
                 <outlet property="followersLabel" destination="LYc-Z4-ewM" id="eNk-HC-toT"/>
                 <outlet property="followersLine" destination="gZV-Oj-PPJ" id="O2U-Vi-Tof"/>
                 <outlet property="followingLabel" destination="Egl-6j-iPc" id="U3U-Gf-pZR"/>
+                <outlet property="headerContainer" destination="Emd-VD-xfa" id="pBF-Or-0uE"/>
                 <outlet property="productLabel" destination="mNV-Na-zCt" id="dUg-lp-RTL"/>
                 <outlet property="productLine" destination="cFm-bK-wp5" id="jNj-DT-fGK"/>
+                <outlet property="productsCollectionView" destination="d2M-9m-AoO" id="nJ4-NP-Qlq"/>
                 <outlet property="progressView" destination="XBw-fg-qfJ" id="XcM-by-Kga"/>
                 <outlet property="reviewLabel" destination="AVb-cy-rmr" id="cvP-OL-aTf"/>
                 <outlet property="reviewLine" destination="ojO-Xf-ELa" id="FzL-4s-lqJ"/>
+                <outlet property="scrollView" destination="NGi-V2-PRt" id="6h5-f7-UZp"/>
+                <outlet property="stickyTabsContainer" destination="HoR-LW-u14" id="N7K-t7-SDb"/>
                 <outlet property="userFollowersCount" destination="oq7-V1-kpF" id="hnR-Gm-MGz"/>
                 <outlet property="userFollowingCount" destination="hIK-PK-0Go" id="rDr-vw-xev"/>
                 <outlet property="userProfileCity" destination="n61-jN-hI0" id="f1b-ur-cqG"/>

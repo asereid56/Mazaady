@@ -32,8 +32,18 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var followersButtonLabel: UILabel!
     @IBOutlet weak var followersLine: UIView!
     
+    @IBOutlet weak var productsCollectionView: UICollectionView!
+    
+    
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var headerContainer: UIStackView!
+    @IBOutlet weak var stickyTabsContainer: UIStackView!
+    @IBOutlet weak var contentView: UIView!
+    
+    
     // MARK: - Properties
     private var cancellables: Set<AnyCancellable> = []
+    private var originalTabsFrame: CGRect = .zero
     let viewModel: ProfileViewModel
     
     init(viewModel: ProfileViewModel) {
@@ -53,6 +63,22 @@ class ProfileViewController: UIViewController {
         setupTapGestures()
         viewModel.fetchProfile()
         setupScreenLocalization()
+        setupCollectionView()
+    }
+    
+    private func setupCollectionView() {
+        productsCollectionView.register(UINib(nibName: "ProductCell", bundle: nil), forCellWithReuseIdentifier: "ProductCell")
+        productsCollectionView.dataSource = self
+        productsCollectionView.delegate = self
+        productsCollectionView.isScrollEnabled = false
+        
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = 16
+        layout.minimumInteritemSpacing = 16
+        let itemWidth = (view.frame.width - 48) / 2 // 2 columns with 16px spacing
+        layout.itemSize = CGSize(width: itemWidth, height: 280) // Adjust height as needed
+        productsCollectionView.collectionViewLayout = layout
     }
     
     private func setupBindings() {
@@ -85,6 +111,14 @@ class ProfileViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] selectedTab in
                 self?.updateTabAppearance(for: selectedTab)
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$products
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.productsCollectionView.reloadData()
+                self?.updateContentViewHeight()
             }
             .store(in: &cancellables)
     }
@@ -157,6 +191,43 @@ class ProfileViewController: UIViewController {
         }
     }
     
+    private func updateContentView(for selectedTab: ProfileViewModel.SelectedTab) {
+        switch selectedTab {
+        case .products:
+            productsCollectionView.isHidden = false
+            // Hide other content views here
+            
+        case .reviews:
+            productsCollectionView.isHidden = true
+            contentView.layoutIfNeeded()
+            
+        case .followers:
+            productsCollectionView.isHidden = true
+        }
+    }
+    
+    private func updateContentViewHeight() {
+        // Calculate collection view height based on content
+        let rows = ceil(CGFloat(viewModel.products.count) / 2)
+        let collectionHeight = rows * 280 + (rows - 1) * 16
+        
+        // Update collection view height constraint
+        productsCollectionView.constraints.forEach {
+            if $0.firstAttribute == .height {
+                $0.constant = collectionHeight
+            }
+        }
+        
+        // Update content view height
+        contentView.layoutIfNeeded()
+        let contentHeight = headerContainer.frame.height +
+                           stickyTabsContainer.frame.height +
+                           productsCollectionView.frame.height + 40
+        contentView.frame.size.height = contentHeight
+        scrollView.contentSize = contentView.frame.size
+    }
+    
+    
     private func resetAllTabs() {
         let defaultTextColor = UIColor(named: "Gray80") ?? .gray
         
@@ -197,5 +268,20 @@ class ProfileViewController: UIViewController {
     @IBAction func changeLanguageButton(_ sender: Any) {
         guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
         UIApplication.shared.open(url)
+    }
+}
+
+
+// MARK: - UICollectionViewDataSource & Delegate
+extension ProfileViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return viewModel.products.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProductCell", for: indexPath) as! ProductCell
+        let product = viewModel.products[indexPath.item]
+        cell.configure(with: product)
+        return cell
     }
 }

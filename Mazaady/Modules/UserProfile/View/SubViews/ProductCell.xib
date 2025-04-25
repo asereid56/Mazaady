@@ -139,6 +139,21 @@
                 <constraint firstAttribute="trailing" secondItem="aR4-RO-UYX" secondAttribute="trailing" constant="4" id="ZsJ-Fa-m72"/>
             </constraints>
             <size key="customSize" width="117" height="314"/>
+            <connections>
+                <outlet property="dayCount" destination="IQd-qC-mGY" id="GQx-WH-pNP"/>
+                <outlet property="dayLabel" destination="uR0-8v-Ogj" id="2B2-Ww-G04"/>
+                <outlet property="hourCount" destination="1Jg-b1-mvE" id="FQb-FN-sjn"/>
+                <outlet property="hourLabel" destination="CZM-Q3-QBu" id="0l1-Ja-ibB"/>
+                <outlet property="lotStartInLabel" destination="8ba-AS-cT6" id="MgF-42-EW5"/>
+                <outlet property="minuteCount" destination="e6i-7C-Wzy" id="OMG-Vr-geG"/>
+                <outlet property="minuteLabel" destination="Ua7-e9-GHz" id="60I-ej-PiU"/>
+                <outlet property="offerPriceLabel" destination="3WV-gH-NKK" id="4fe-dZ-DDh"/>
+                <outlet property="offerPriceValue" destination="aUn-5T-CN9" id="3G8-xg-wNW"/>
+                <outlet property="priceLabel" destination="o9N-Q5-hiY" id="JEb-br-bLk"/>
+                <outlet property="priceValue" destination="ZP9-Qi-rmx" id="a9W-4X-fsN"/>
+                <outlet property="productImage" destination="S0V-8e-p3C" id="4Cy-o2-gl9"/>
+                <outlet property="productName" destination="TGE-ep-dDa" id="Yl3-Ge-yzw"/>
+            </connections>
             <point key="canvasLocation" x="-219.08396946564883" y="4.2253521126760569"/>
         </collectionViewCell>
     </objects>
