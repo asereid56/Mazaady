@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "D" : {
+
+    },
     "English" : {
       "localizations" : {
         "ar" : {
@@ -42,6 +45,21 @@
           }
         }
       }
+    },
+    "H" : {
+
+    },
+    "Lot Starts In" : {
+
+    },
+    "M" : {
+
+    },
+    "Offer Price" : {
+
+    },
+    "Price" : {
+
     },
     "Products" : {
       "localizations" : {

@@ -1,5 +1,5 @@
 {
-  "originHash" : "4106d8538067daa9d0c2d5fd9e6947b37eaaf975292d75cd0fc3ff39d862d113",
+  "originHash" : "5c299033aefc7ed3978b2a43726547c151d734f9f004752fcf1c195138bb0df3",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "513364f870f6bfc468f9d2ff0a95caccc10044c5",
         "version" : "5.10.2"
+      }
+    },
+    {
+      "identity" : "chtcollectionviewwaterfalllayout",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/chiahsien/CHTCollectionViewWaterfallLayout.git",
+      "state" : {
+        "revision" : "1fe42247efc8aea1ad03332d2b44f2d7fb1644bc",
+        "version" : "0.9.10"
       }
     },
     {

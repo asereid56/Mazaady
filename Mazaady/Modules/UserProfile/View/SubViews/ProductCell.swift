@@ -32,8 +32,16 @@ class ProductCell: UICollectionViewCell {
     private func setupUI() {
         layer.cornerRadius = 24
         layer.masksToBounds = true
+        backgroundColor = .white
         productImage.layer.cornerRadius = 20
-        productImage.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        productImage.contentMode = .scaleAspectFill
+        productImage.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        priceLabel.text = NSLocalizedString("Price", comment: "")
+        offerPriceLabel.text = NSLocalizedString("Offer Price", comment: "")
+        lotStartInLabel.text = NSLocalizedString("Lot Starts In", comment: "")
+        dayLabel.text = NSLocalizedString("D", comment: "")
+        minuteLabel.text = NSLocalizedString("M", comment: "")
+        hourLabel.text = NSLocalizedString("H", comment: "")
     }
     
     func configure(with product: ProductEntity) {
