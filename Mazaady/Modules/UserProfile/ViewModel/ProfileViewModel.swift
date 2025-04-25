@@ -12,6 +12,7 @@ class ProfileViewModel: ObservableObject {
     @Published private(set) var profile: ProfileEntity?
     @Published private(set) var products: [ProductEntity] = []
     @Published private(set) var advertisements: [Advertisement] = []
+    @Published private(set) var tags: [Tag] = []
     @Published private(set) var isLoading: Bool = false
     @Published private(set) var errorMessage: String?
     @Published var selectedTab: SelectedTab = .products {
@@ -19,11 +20,13 @@ class ProfileViewModel: ObservableObject {
             if selectedTab == .products {
                 fetchProducts()
                 fetchAdvertisements()
+                fetchTags()
             }
         }
     }
     private var productsFetched = false
     private var advertisementsFetched = false
+    private var tagsFetched = false
     
     enum SelectedTab {
         case products
@@ -35,15 +38,18 @@ class ProfileViewModel: ObservableObject {
     private let userUseCase: UserProfileUseCase
     private let productUseCase: ProductUseCase
     private let advertismentUseCase: AdvertisementUseCase
+    private let tagUseCase: TagUseCase
     
     init(
         userUseCase: UserProfileUseCase,
         productUseCase: ProductUseCase,
-        advertismentUseCase: AdvertisementUseCase
+        advertismentUseCase: AdvertisementUseCase,
+        tagUseCase: TagUseCase
     ) {
         self.userUseCase = userUseCase
         self.productUseCase = productUseCase
         self.advertismentUseCase = advertismentUseCase
+        self.tagUseCase = tagUseCase
     }
     
     func fetchProfile() {
@@ -106,6 +112,28 @@ class ProfileViewModel: ObservableObject {
                 case .success(let advertisements):
                     self.advertisements = advertisements.advertisements
                     self.advertisementsFetched = true
+                case .failure(let error):
+                    self.errorMessage = error.localizedDescription
+                }
+            }
+        }
+    }
+    
+    func fetchTags() {
+        guard !tagsFetched else { return }
+        isLoading = true
+        errorMessage = nil
+        
+        let request = TagRequest()
+        tagUseCase.execute(request: request) { [weak self] result in
+            
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                
+                switch result {
+                case .success(let tags):
+                    self.tagsFetched = true
+                    self.tags = tags.tags
                 case .failure(let error):
                     self.errorMessage = error.localizedDescription
                 }

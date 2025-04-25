@@ -271,7 +271,7 @@ class ProfileViewController: UIViewController {
                                     stickyTabsContainer.frame.height
         
         if viewModel.selectedTab == .products {
-            contentHeight += adsHeight + collectionHeight + 40 // Add padding between sections
+            contentHeight += adsHeight + collectionHeight + 40
         } else {
             contentHeight += 40 // Empty view padding
         }

@@ -53,10 +53,13 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         
         let userProfileUseCase = UserProfileUseCase()
         let advertisingUseCase = AdvertisementUseCase()
+        let tagsUseCase = TagUseCase()
+        let productUseCase = ProductUseCase()
         let profileViewModel = ProfileViewModel(
             userUseCase: userProfileUseCase,
-            productUseCase: ProductUseCase(),
-            advertismentUseCase: advertisingUseCase
+            productUseCase: productUseCase,
+            advertismentUseCase: advertisingUseCase,
+            tagUseCase: tagsUseCase
         )
         let profileVC = ProfileViewController(viewModel: profileViewModel)
         profileVC.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.fill"), tag: 4)
