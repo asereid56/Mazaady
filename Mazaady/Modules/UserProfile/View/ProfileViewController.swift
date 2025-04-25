@@ -136,7 +136,6 @@ class ProfileViewController: UIViewController {
         contentView.backgroundColor = .pink10
         adsTableView.backgroundColor = .clear
         tagsCollectionView.backgroundColor = .clear
-        scrollView.backgroundColor = .pink10
         updateTabAppearance(for: .products)
         viewModel.selectTab(.products)
     }
@@ -192,8 +191,6 @@ class ProfileViewController: UIViewController {
             productLine.isHidden = false
             productsCollectionView.isHidden = false
             emptyView.isHidden = true
-            adsTableView.isHidden = false
-            tagsCollectionView.isHidden = false
             
         case .reviews:
             reviewLabel.textColor = UIColor(named: "Pink100")
@@ -201,8 +198,6 @@ class ProfileViewController: UIViewController {
             productsCollectionView.isHidden = true
             emptyView.isHidden = false
             emptyLabel.text = NSLocalizedString("No Reviews Yet", comment: "")
-            adsTableView.isHidden = true
-            tagsCollectionView.isHidden = true
 
         case .followers:
             followersButtonLabel.textColor = UIColor(named: "Pink100")
@@ -210,8 +205,6 @@ class ProfileViewController: UIViewController {
             productsCollectionView.isHidden = true
             emptyView.isHidden = false
             emptyLabel.text = NSLocalizedString("No Followers Yet", comment: "")
-            adsTableView.isHidden = true
-            tagsCollectionView.isHidden = true
         }
     }
     
