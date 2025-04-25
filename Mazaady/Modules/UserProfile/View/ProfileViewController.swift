@@ -50,6 +50,7 @@ class ProfileViewController: UIViewController {
     private var cancellables: Set<AnyCancellable> = []
     private var originalTabsFrame: CGRect = .zero
     let viewModel: ProfileViewModel
+    private var prototypeCell: ProductCell?
     
     init(viewModel: ProfileViewModel) {
         self.viewModel = viewModel
@@ -82,9 +83,11 @@ class ProfileViewController: UIViewController {
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 16
         layout.minimumInteritemSpacing = 16
-        let itemWidth = (view.frame.width - 48) / 2 // 2 columns with 16px spacing
-        layout.itemSize = CGSize(width: itemWidth, height: 350)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         productsCollectionView.collectionViewLayout = layout
+        
+        // Load prototype cell for size calculations
+        prototypeCell = Bundle.main.loadNibNamed("ProductCell", owner: nil, options: nil)?.first as? ProductCell
     }
     
     private func setupBindings() {
@@ -224,22 +227,21 @@ class ProfileViewController: UIViewController {
     }
     
     private func updateContentViewHeight() {
-        // Calculate collection view height based on content
-        let rows = ceil(CGFloat(viewModel.products.count) / 2)
-        let collectionHeight = rows * 280 + (rows - 1) * 16
+        productsCollectionView.layoutIfNeeded()
+        let collectionHeight = productsCollectionView.contentSize.height
         
-        // Update collection view height constraint
-        productsCollectionView.constraints.forEach {
-            if $0.firstAttribute == .height {
-                $0.constant = collectionHeight
-            }
+        // Update collection view height constraint if exists
+        if let heightConstraint = productsCollectionView.constraints.first(where: { $0.firstAttribute == .height }) {
+            heightConstraint.constant = collectionHeight
+        } else {
+            productsCollectionView.heightAnchor.constraint(equalToConstant: collectionHeight).isActive = true
         }
         
         // Update content view height
         contentView.layoutIfNeeded()
         let contentHeight = headerContainer.frame.height +
                            stickyTabsContainer.frame.height +
-                           productsCollectionView.frame.height + 40
+                           collectionHeight + 40 // Add padding
         contentView.frame.size.height = contentHeight
         scrollView.contentSize = contentView.frame.size
     }
@@ -300,5 +302,40 @@ extension ProfileViewController: UICollectionViewDataSource, UICollectionViewDel
         let product = viewModel.products[indexPath.item]
         cell.configure(with: product)
         return cell
+    }
+}
+
+extension ProfileViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let spacing: CGFloat = 16
+        let totalHorizontalInset: CGFloat = 16 * 2 // Left + Right insets
+        let numberOfItemsPerRow: CGFloat = 3
+        let availableWidth = collectionView.bounds.width - totalHorizontalInset - (numberOfItemsPerRow - 1) * spacing
+        let itemWidth = availableWidth / numberOfItemsPerRow
+        
+        guard let prototypeCell = prototypeCell else {
+            return CGSize(width: itemWidth, height: 100) // Fallback size
+        }
+        
+        let product = viewModel.products[indexPath.item]
+        prototypeCell.configure(with: product)
+        prototypeCell.contentView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Set width constraint
+        let widthConstraint = prototypeCell.contentView.widthAnchor.constraint(equalToConstant: itemWidth)
+        prototypeCell.contentView.addConstraint(widthConstraint)
+        
+        // Calculate size
+        let targetSize = CGSize(width: itemWidth, height: UIView.layoutFittingCompressedSize.height)
+        let height = prototypeCell.contentView.systemLayoutSizeFitting(
+            targetSize,
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        ).height
+        
+        // Clean up constraint
+        prototypeCell.contentView.removeConstraint(widthConstraint)
+        
+        return CGSize(width: itemWidth, height: height)
     }
 }
