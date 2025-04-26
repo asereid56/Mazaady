@@ -14,7 +14,7 @@ class LanguageViewController: UIViewController {
     @IBOutlet weak var languageTableView: UITableView!
     
     var onConfirm: ((String) -> Void)? = nil
-    var onDismiss: (() -> Void)? = nil
+    private var filteredLanguages: [LanguageEntity] = []
 
     var languages: [LanguageEntity] = [
         LanguageEntity(id: "en", name: "English".localized(), isSelected: Locale.current.language.languageCode?.identifier == "en"),
@@ -29,6 +29,8 @@ class LanguageViewController: UIViewController {
         setupTableView()
         loadCurrentLanguage()
         setupSheetPresentation()
+        filteredLanguages = languages
+        serachView.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -82,35 +84,51 @@ class LanguageViewController: UIViewController {
 
 extension LanguageViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return languages.count
+        return filteredLanguages.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "LanguageCell", for: indexPath) as! LanguageCell
-        cell.configure(with: languages[indexPath.row])
+        cell.configure(with: filteredLanguages[indexPath.row])
         return cell
     }
 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedLanguage = filteredLanguages[indexPath.row]
+        
         languages = languages.map {
             var lang = $0
-            lang.isSelected = (lang.id == languages[indexPath.row].id)
+            lang.isSelected = (lang.id == selectedLanguage.id)
             return lang
         }
         
-        let selectedLang = languages[indexPath.row].id
-        LanguageManager.shared.setLanguage(code: selectedLang)
-        onConfirm?(selectedLang)
+        filteredLanguages = languages.filter {
+            guard let searchText = serachView.text?.lowercased(), !searchText.isEmpty else { return true }
+            return $0.name.lowercased().contains(searchText)
+        }
         
-        loadCurrentLanguage()
+        LanguageManager.shared.setLanguage(code: selectedLanguage.id)
+        onConfirm?(selectedLanguage.id)
+        
         tableView.reloadData()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.dismiss(animated: true)
         }
     }
+
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
+    }
+}
+
+
+extension LanguageViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        filteredLanguages = languages.filter {
+            searchText.isEmpty || $0.name.lowercased().contains(searchText.lowercased())
+        }
+        languageTableView.reloadData()
     }
 }

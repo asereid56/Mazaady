@@ -386,7 +386,7 @@
                 </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
-            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <color key="backgroundColor" name="Pink10"/>
             <constraints>
                 <constraint firstItem="yLE-tn-YVg" firstAttribute="top" secondItem="HoR-LW-u14" secondAttribute="bottom" constant="16" id="9Mq-jR-B1l"/>
                 <constraint firstItem="1Of-yn-Bzv" firstAttribute="width" secondItem="fnl-2z-Ty3" secondAttribute="width" id="B3M-52-hbd"/>

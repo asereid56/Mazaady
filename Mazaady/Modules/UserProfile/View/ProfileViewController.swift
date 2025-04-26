@@ -166,7 +166,7 @@ class ProfileViewController: UIViewController {
                 self?.productsCollectionView.reloadData()
                 if products.isEmpty {
                     self?.emptyView.isHidden = false
-                    self?.emptyLabel.text = "Try search by another word..."
+                    self?.emptyLabel.text = "Try search by another word...".localized()
                 } else {
                     self?.emptyView.isHidden = true
                 }
@@ -211,6 +211,9 @@ class ProfileViewController: UIViewController {
         searchButton.backgroundColor = .pink100
         searchButton.layer.cornerRadius = 10
         searchButton.layer.masksToBounds = true
+        if LanguageManager.shared.isRTL {
+            searchButton.transform = CGAffineTransform(rotationAngle: .pi)
+        }
         searchButton.tintColor = .pink100
         configureSearchBarAppearance()
         viewModel.selectTab(.products)
