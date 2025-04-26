@@ -1,6 +1,23 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "An unexpected error occurred. Please try again later." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حدث خطأ غير متوقع. الرجاء المحاولة لاحقًا."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An unexpected error occurred. Please try again later."
+          }
+        }
+      }
+    },
     "Arabic" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -35,6 +52,23 @@
         }
       }
     },
+    "Connection timed out. Try again." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "انتهت مهلة الاتصال. حاول مرة أخرى."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connection timed out. Try again."
+          }
+        }
+      }
+    },
     "D" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -65,6 +99,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "English"
+          }
+        }
+      }
+    },
+    "Error" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خطأ"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error"
           }
         }
       }
@@ -200,6 +251,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No Followers Yet"
+          }
+        }
+      }
+    },
+    "No internet connection. Please check your network." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا يوجد اتصال بالإنترنت. الرجاء التحقق من الشبكة."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No internet connection. Please check your network."
           }
         }
       }

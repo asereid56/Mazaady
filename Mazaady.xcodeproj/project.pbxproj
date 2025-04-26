@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D92374B72DBD5878001FAE1B /* SwiftMessages in Frameworks */ = {isa = PBXBuildFile; productRef = D92374B62DBD5878001FAE1B /* SwiftMessages */; };
+		D92374CF2DBD640F001FAE1B /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D92374CE2DBD640F001FAE1B /* RealmSwift */; };
+		D92374D22DBD6659001FAE1B /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = D92374CE2DBD640F001FAE1B /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		D93A08152DBC0741000125D5 /* CHTCollectionViewWaterfallLayout in Frameworks */ = {isa = PBXBuildFile; productRef = D93A08142DBC0741000125D5 /* CHTCollectionViewWaterfallLayout */; };
 		D9534C6C2DBBA69000074ED6 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = D9534C6B2DBBA69000074ED6 /* Alamofire */; };
 		D9534CB72DBBBAAB00074ED6 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = D9534CB62DBBBAAB00074ED6 /* Kingfisher */; };
@@ -28,6 +31,20 @@
 			remoteInfo = Mazaady;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D92374D32DBD6659001FAE1B /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				D92374D22DBD6659001FAE1B /* RealmSwift in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		D96086D62DBA89240036840C /* Mazaady.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mazaady.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,6 +90,8 @@
 			files = (
 				D9534CB72DBBBAAB00074ED6 /* Kingfisher in Frameworks */,
 				D9534C6C2DBBA69000074ED6 /* Alamofire in Frameworks */,
+				D92374B72DBD5878001FAE1B /* SwiftMessages in Frameworks */,
+				D92374CF2DBD640F001FAE1B /* RealmSwift in Frameworks */,
 				D93A08152DBC0741000125D5 /* CHTCollectionViewWaterfallLayout in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -124,6 +143,7 @@
 				D96086D22DBA89240036840C /* Sources */,
 				D96086D32DBA89240036840C /* Frameworks */,
 				D96086D42DBA89240036840C /* Resources */,
+				D92374D32DBD6659001FAE1B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -137,6 +157,8 @@
 				D9534C6B2DBBA69000074ED6 /* Alamofire */,
 				D9534CB62DBBBAAB00074ED6 /* Kingfisher */,
 				D93A08142DBC0741000125D5 /* CHTCollectionViewWaterfallLayout */,
+				D92374B62DBD5878001FAE1B /* SwiftMessages */,
+				D92374CE2DBD640F001FAE1B /* RealmSwift */,
 			);
 			productName = Mazaady;
 			productReference = D96086D62DBA89240036840C /* Mazaady.app */;
@@ -225,6 +247,8 @@
 				D9534C6A2DBBA69000074ED6 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				D9534CB52DBBBAAB00074ED6 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				D93A08132DBC0741000125D5 /* XCRemoteSwiftPackageReference "CHTCollectionViewWaterfallLayout" */,
+				D92374B52DBD5878001FAE1B /* XCRemoteSwiftPackageReference "SwiftMessages" */,
+				D92374CD2DBD640F001FAE1B /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D96086D72DBA89240036840C /* Products */;
@@ -607,6 +631,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		D92374B52DBD5878001FAE1B /* XCRemoteSwiftPackageReference "SwiftMessages" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftKickMobile/SwiftMessages.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.0.1;
+			};
+		};
+		D92374CD2DBD640F001FAE1B /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		D93A08132DBC0741000125D5 /* XCRemoteSwiftPackageReference "CHTCollectionViewWaterfallLayout" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/chiahsien/CHTCollectionViewWaterfallLayout.git";
@@ -634,6 +674,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		D92374B62DBD5878001FAE1B /* SwiftMessages */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D92374B52DBD5878001FAE1B /* XCRemoteSwiftPackageReference "SwiftMessages" */;
+			productName = SwiftMessages;
+		};
+		D92374CE2DBD640F001FAE1B /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D92374CD2DBD640F001FAE1B /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
 		D93A08142DBC0741000125D5 /* CHTCollectionViewWaterfallLayout */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D93A08132DBC0741000125D5 /* XCRemoteSwiftPackageReference "CHTCollectionViewWaterfallLayout" */;

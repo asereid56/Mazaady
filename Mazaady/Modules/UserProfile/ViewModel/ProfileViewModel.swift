@@ -7,6 +7,8 @@
 
 import Foundation
 import Combine
+import Realm
+import RealmSwift
 
 class ProfileViewModel: ObservableObject {
     @Published private(set) var profile: ProfileEntity?
@@ -66,8 +68,16 @@ class ProfileViewModel: ObservableObject {
                 switch result {
                 case .success(let entity):
                     self.profile = entity
+                    RealmManager.shared.save(ProfileRealmObject(entity: entity))
                 case .failure(let error):
-                    self.errorMessage = error.localizedDescription
+                    if error.localizedDescription.contains("offline") {
+                        if let savedProfile = RealmManager.shared.fetchFirst(ProfileRealmObject.self) {
+                            self.profile = savedProfile.toEntity()
+                            self.errorMessage = error.localizedDescription
+                        }
+                    } else {
+                        self.errorMessage = error.localizedDescription
+                    }
                 }
             }
         }
@@ -80,7 +90,6 @@ class ProfileViewModel: ObservableObject {
         
         let request = ProductsRequest(query: searchText)
         productUseCase.execute(request: request) { [weak self] result in
-            
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 self.isLoading = false
@@ -89,9 +98,16 @@ class ProfileViewModel: ObservableObject {
                 case .success(let products):
                     self.products = products
                     self.productsFetched = true
+                    let realmProducts = products.map { ProductRealmObject(entity: $0) }
+                    RealmManager.shared.saveList(realmProducts)
                 case .failure(let error):
-                    self.errorMessage = error.localizedDescription
-                    
+                    if error.localizedDescription.contains("offline") {
+                        let savedProducts = RealmManager.shared.fetchList(ProductRealmObject.self).map { $0.toEntity() }
+                        self.products = savedProducts
+                        self.errorMessage = error.localizedDescription
+                    } else {
+                        self.errorMessage = error.localizedDescription
+                    }
                 }
             }
         }
@@ -101,42 +117,62 @@ class ProfileViewModel: ObservableObject {
         guard !advertisementsFetched else { return }
         isLoading = true
         errorMessage = nil
-        
+
         let request = AdvertisementsRequest()
         advertismentUseCase.execute(request: request) { [weak self] result in
-            
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 self.isLoading = false
-                
+
                 switch result {
-                case .success(let advertisements):
-                    self.advertisements = advertisements.advertisements
+                case .success(let advertisementsEntity):
+                    self.advertisements = advertisementsEntity.advertisements
                     self.advertisementsFetched = true
+                    let realmAdvertisements = advertisementsEntity.advertisements.map { AdvertisementRealmObject(entity: $0) }
+                    RealmManager.shared.saveList(realmAdvertisements)
+
                 case .failure(let error):
-                    self.errorMessage = error.localizedDescription
+                    if error.localizedDescription.contains("offline") {
+                        let savedAdvertisements = RealmManager.shared.fetchList(AdvertisementRealmObject.self).map { $0.toEntity() }
+                        self.advertisements = savedAdvertisements
+                        self.advertisementsFetched = true
+                        self.errorMessage = error.localizedDescription
+                    } else {
+                        self.errorMessage = error.localizedDescription
+                    }
                 }
             }
         }
     }
+
     
     func fetchTags() {
         guard !tagsFetched else { return }
         isLoading = true
         errorMessage = nil
-        
+
         let request = TagRequest()
         tagUseCase.execute(request: request) { [weak self] result in
-            
             DispatchQueue.main.async {
                 guard let self = self else { return }
-                
+                self.isLoading = false
+
                 switch result {
-                case .success(let tags):
+                case .success(let tagsEntity):
                     self.tagsFetched = true
-                    self.tags = tags.tags
+                    self.tags = tagsEntity.tags
+                    let realmTags = tagsEntity.tags.map { TagRealmObject(entity: $0) }
+                    RealmManager.shared.saveList(realmTags)
+
                 case .failure(let error):
-                    self.errorMessage = error.localizedDescription
+                    if error.localizedDescription.contains("offline") {
+                        let savedTags = RealmManager.shared.fetchList(TagRealmObject.self).map { $0.toEntity() }
+                        self.tags = savedTags
+                        self.tagsFetched = true
+                        self.errorMessage = error.localizedDescription
+                    } else {
+                        self.errorMessage = error.localizedDescription
+                    }
                 }
             }
         }

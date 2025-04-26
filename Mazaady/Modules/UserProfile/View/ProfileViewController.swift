@@ -8,6 +8,7 @@
 import UIKit
 import Kingfisher
 import Combine
+import SwiftMessages
 
 class ProfileViewController: UIViewController {
     // MARK: - Outlets
@@ -143,13 +144,11 @@ class ProfileViewController: UIViewController {
             .store(in: &cancellables)
         
         viewModel.$errorMessage
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] errorMessage in
-                if let errorMessage = errorMessage {
-                    self?.showError(message: errorMessage)
+                .compactMap { $0 }
+                .sink { [weak self] errorMessage in
+                    self?.handleErrorMessage(errorMessage)
                 }
-            }
-            .store(in: &cancellables)
+                .store(in: &cancellables)
         
         viewModel.$selectedTab
             .receive(on: DispatchQueue.main)
@@ -331,15 +330,27 @@ class ProfileViewController: UIViewController {
         followersLine.isHidden = true
     }
     
+    private func handleErrorMessage(_ message: String) {
+        if message.contains("The Internet connection appears to be offline") {
+            showErrorMessage("No internet connection. Please check your network.")
+        } else if message.contains("timed out") {
+            showErrorMessage("Connection timed out. Try again.")
+        } else {
+            showErrorMessage("An unexpected error occurred. Please try again later.")
+        }
+    }
+
     
-    private func showError(message: String) {
-        let alert = UIAlertController(
-            title: "Error",
-            message: message,
-            preferredStyle: .alert
-        )
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
+    private func showErrorMessage(_ message: String) {
+        let view = MessageView.viewFromNib(layout: .messageView)
+        view.configureTheme(.error)
+        view.configureDropShadow()
+        view.configureContent(title: "Error".localized(), body: message.localized())
+        view.button?.isHidden = true
+        var config = SwiftMessages.Config()
+        config.presentationStyle = .top
+        config.duration = .seconds(seconds: 3)
+        SwiftMessages.show(config: config, view: view)
     }
     
     // MARK: - Actions
