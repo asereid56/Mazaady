@@ -26,8 +26,8 @@ class ProfileViewModel: ObservableObject {
         }
     }
     var productsFetched = false
-    private var advertisementsFetched = false
-    private var tagsFetched = false
+    var advertisementsFetched = false
+    var tagsFetched = false
     
     enum SelectedTab {
         case products

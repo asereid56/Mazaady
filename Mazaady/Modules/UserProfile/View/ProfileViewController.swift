@@ -74,6 +74,7 @@ class ProfileViewController: UIViewController {
         setupCollectionView()
         setupTableView()
         setupTagsCollectionView()
+        setupRefreshControl()
     }
     
     private func setupCollectionView() {
@@ -353,6 +354,29 @@ class ProfileViewController: UIViewController {
     @objc private func followersTabTapped() {
         viewModel.selectTab(.followers)
     }
+    
+    private func setupRefreshControl() {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
+        scrollView.refreshControl = refreshControl
+    }
+
+    @objc private func handleRefresh(_ sender: UIRefreshControl) {
+        searchView.text = ""
+        // Commented because everytime it get new data , this invalid
+        // viewModel.fetchProfile()
+        viewModel.productsFetched = false
+        viewModel.advertisementsFetched = false
+        viewModel.tagsFetched = false
+        viewModel.fetchProducts(searchText: "")
+        viewModel.fetchAdvertisements()
+        viewModel.fetchTags()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            sender.endRefreshing()
+        }
+    }
+
     
     @IBAction func searchButtonTapped(_ sender: Any) {
         viewModel.productsFetched = false
