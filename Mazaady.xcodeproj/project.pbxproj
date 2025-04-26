@@ -302,6 +302,8 @@
 /* Begin XCBuildConfiguration section */
 		D96087002DBA89250036840C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = D96086D82DBA89240036840C /* Mazaady */;
+			baseConfigurationReferenceRelativePath = Core/Config/Staging/Staging.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -330,6 +332,8 @@
 		};
 		D96087012DBA89250036840C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = D96086D82DBA89240036840C /* Mazaady */;
+			baseConfigurationReferenceRelativePath = Core/Config/Release/Release.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -358,6 +362,8 @@
 		};
 		D96087022DBA89250036840C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = D96086D82DBA89240036840C /* Mazaady */;
+			baseConfigurationReferenceRelativePath = Core/Config/Staging/Staging.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -422,6 +428,8 @@
 		};
 		D96087032DBA89250036840C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = D96086D82DBA89240036840C /* Mazaady */;
+			baseConfigurationReferenceRelativePath = Core/Config/Release/Release.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -479,6 +487,8 @@
 		};
 		D96087052DBA89250036840C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = D96086D82DBA89240036840C /* Mazaady */;
+			baseConfigurationReferenceRelativePath = Core/Config/Staging/Staging.xcconfig;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -498,6 +508,8 @@
 		};
 		D96087062DBA89250036840C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = D96086D82DBA89240036840C /* Mazaady */;
+			baseConfigurationReferenceRelativePath = Core/Config/Release/Release.xcconfig;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -517,6 +529,8 @@
 		};
 		D96087082DBA89250036840C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = D96086D82DBA89240036840C /* Mazaady */;
+			baseConfigurationReferenceRelativePath = Core/Config/Staging/Staging.xcconfig;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -534,6 +548,8 @@
 		};
 		D96087092DBA89250036840C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = D96086D82DBA89240036840C /* Mazaady */;
+			baseConfigurationReferenceRelativePath = Core/Config/Release/Release.xcconfig;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
