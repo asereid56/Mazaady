@@ -29,6 +29,8 @@
                 <outlet property="reviewLabel" destination="AVb-cy-rmr" id="cvP-OL-aTf"/>
                 <outlet property="reviewLine" destination="ojO-Xf-ELa" id="FzL-4s-lqJ"/>
                 <outlet property="scrollView" destination="NGi-V2-PRt" id="6h5-f7-UZp"/>
+                <outlet property="searchButton" destination="yLE-tn-YVg" id="5jn-HX-vZF"/>
+                <outlet property="searchView" destination="UD6-YB-EoW" id="U4s-xN-FGy"/>
                 <outlet property="stickyTabsContainer" destination="HoR-LW-u14" id="N7K-t7-SDb"/>
                 <outlet property="tagsCollectionView" destination="NmE-T3-EIL" id="Gjc-mC-rba"/>
                 <outlet property="userFollowersCount" destination="oq7-V1-kpF" id="hnR-Gm-MGz"/>
@@ -360,24 +362,27 @@
                         </stackView>
                     </subviews>
                 </stackView>
-                <searchBar contentMode="redraw" searchBarStyle="minimal" translatesAutoresizingMaskIntoConstraints="NO" id="UD6-YB-EoW">
-                    <rect key="frame" x="16" y="409.33333333333331" width="319" height="34"/>
+                <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="UD6-YB-EoW">
+                    <rect key="frame" x="16" y="409.33333333333331" width="313" height="34"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="34" id="4Eo-mI-DFX"/>
                     </constraints>
                     <textInputTraits key="textInputTraits"/>
                 </searchBar>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yLE-tn-YVg">
-                    <rect key="frame" x="343" y="409.33333333333331" width="34" height="34"/>
+                    <rect key="frame" x="337" y="409.33333333333331" width="40" height="34"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="34" id="IbW-5m-YoK"/>
                         <constraint firstAttribute="height" constant="34" id="YgA-94-5Pc"/>
-                        <constraint firstAttribute="width" constant="34" id="cQ7-fz-t23"/>
+                        <constraint firstAttribute="width" constant="40" id="cQ7-fz-t23"/>
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="34" id="eaz-Gp-PYH"/>
                     </constraints>
                     <color key="tintColor" name="Pink100"/>
                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                    <buttonConfiguration key="configuration" style="filled" image="paperplane" catalog="system"/>
+                    <buttonConfiguration key="configuration" style="filled" image="send"/>
+                    <connections>
+                        <action selector="searchButtonTapped:" destination="-1" eventType="touchUpInside" id="VCH-1c-C80"/>
+                    </connections>
                 </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
@@ -403,7 +408,7 @@
     <resources>
         <image name="followers" width="24" height="24"/>
         <image name="following" width="24" height="24"/>
-        <image name="paperplane" catalog="system" width="128" height="119"/>
+        <image name="send" width="20" height="20"/>
         <image name="setting" width="24" height="24"/>
         <namedColor name="Black60">
             <color red="0.23921568627450981" green="0.23921568627450981" blue="0.23921568627450981" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

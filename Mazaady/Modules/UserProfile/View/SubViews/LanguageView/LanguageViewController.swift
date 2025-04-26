@@ -25,6 +25,7 @@ class LanguageViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white90
         languageLabel.text = "Language".localized()
+        configureSearchBarAppearance()
         setupTableView()
         loadCurrentLanguage()
         setupSheetPresentation()
@@ -41,6 +42,16 @@ class LanguageViewController: UIViewController {
         languageTableView.dataSource = self
         languageTableView.delegate = self
         languageTableView.register(UINib(nibName: "LanguageCell", bundle: nil), forCellReuseIdentifier: "LanguageCell")
+    }
+    
+    private func configureSearchBarAppearance() {
+        if let textField = serachView.value(forKey: "searchField") as? UITextField {
+            if let iconView = textField.leftView as? UIImageView {
+                iconView.tintColor = .pink100
+                iconView.image = iconView.image?.withRenderingMode(.alwaysTemplate)
+            }
+            textField.placeholder = "Search".localized()
+        }
     }
     
     private func loadCurrentLanguage() {

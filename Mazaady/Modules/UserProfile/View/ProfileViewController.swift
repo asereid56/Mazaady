@@ -45,6 +45,8 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var stickyTabsContainer: UIStackView!
     @IBOutlet weak var contentView: UIView!
     
+    @IBOutlet weak var searchView: UISearchBar!
+    @IBOutlet weak var searchButton: UIButton!
     
     // MARK: - Properties
     private var cancellables: Set<AnyCancellable> = []
@@ -160,8 +162,15 @@ class ProfileViewController: UIViewController {
         
         viewModel.$products
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
+            .sink { [weak self] products in
                 self?.productsCollectionView.reloadData()
+                if products.isEmpty {
+                    self?.emptyView.isHidden = false
+                    self?.emptyLabel.text = "Try search by another word..."
+                } else {
+                    self?.emptyView.isHidden = true
+                }
+                
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     self?.updateContentViewHeight()
                 }
@@ -196,8 +205,27 @@ class ProfileViewController: UIViewController {
         contentView.backgroundColor = .pink10
         adsTableView.backgroundColor = .clear
         tagsCollectionView.backgroundColor = .clear
+        searchButton.layer.cornerRadius = 10
+        searchButton.layer.opacity = 0.4
+        searchButton.setTitleColor(.pink100, for: .normal)
+        searchButton.backgroundColor = .pink100
+        searchButton.layer.cornerRadius = 10
+        searchButton.layer.masksToBounds = true
+        searchButton.tintColor = .pink100
+        configureSearchBarAppearance()
         viewModel.selectTab(.products)
     }
+    
+    private func configureSearchBarAppearance() {
+        if let textField = searchView.value(forKey: "searchField") as? UITextField {
+            if let iconView = textField.leftView as? UIImageView {
+                iconView.tintColor = .pink100
+                iconView.image = iconView.image?.withRenderingMode(.alwaysTemplate)
+            }
+            textField.placeholder = "Search".localized()
+        }
+    }
+
     
     private func updateUI(with profile: ProfileEntity) {
         if let imageUrl = URL(string: profile.image) {
@@ -321,6 +349,12 @@ class ProfileViewController: UIViewController {
     
     @objc private func followersTabTapped() {
         viewModel.selectTab(.followers)
+    }
+    
+    @IBAction func searchButtonTapped(_ sender: Any) {
+        viewModel.productsFetched = false
+        let searchText = searchView.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        viewModel.fetchProducts(searchText: searchText)
     }
     
     @IBAction func changeLanguageButton(_ sender: Any) {

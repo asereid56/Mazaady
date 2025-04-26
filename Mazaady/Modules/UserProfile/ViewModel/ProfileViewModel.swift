@@ -19,13 +19,13 @@ class ProfileViewModel: ObservableObject {
     @Published var selectedTab: SelectedTab = .products {
         didSet {
             if selectedTab == .products {
-                fetchProducts()
+                fetchProducts(searchText: "")
                 fetchAdvertisements()
                 fetchTags()
             }
         }
     }
-    private var productsFetched = false
+    var productsFetched = false
     private var advertisementsFetched = false
     private var tagsFetched = false
     
@@ -73,12 +73,12 @@ class ProfileViewModel: ObservableObject {
         }
     }
     
-    func fetchProducts() {
+    func fetchProducts(searchText: String) {
         guard !productsFetched else { return }
         isLoading = true
         errorMessage = nil
         
-        let request = ProductsRequest()
+        let request = ProductsRequest(query: searchText)
         productUseCase.execute(request: request) { [weak self] result in
             
             DispatchQueue.main.async {

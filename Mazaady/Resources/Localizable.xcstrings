@@ -321,6 +321,23 @@
           }
         }
       }
+    },
+    "Try search by another word..." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حاول البحث بكلمة أخرى..."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try search by another word..."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
