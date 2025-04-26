@@ -26,10 +26,18 @@ class ProductCell: UICollectionViewCell {
     @IBOutlet weak var hourView: UIStackView!
     @IBOutlet weak var minuteView: UIStackView!
     
+    private var timer: Timer?
+    private var remainingSeconds: Int = 0
     
     override func awakeFromNib() {
         super.awakeFromNib()
         setupUI()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        timer?.invalidate()
+        timer = nil
     }
     
     private func setupUI() {
@@ -79,45 +87,49 @@ class ProductCell: UICollectionViewCell {
             offerPriceValue.isHidden = true
         }
         
-        if let endDate = product.endDate {
-            let (days, hours, minutes) = calculateTimeRemaining(endDate: endDate)
-            dayCount.text = "\(days)"
-            hourCount.text = "\(hours)"
-            minuteCount.text = "\(minutes)"
-            lotStartInLabel.isHidden = false
-            dayLabel.isHidden = false
-            dayCount.isHidden = false
-            hourLabel.isHidden = false
-            hourCount.isHidden = false
-            minuteLabel.isHidden = false
-            minuteCount.isHidden = false
-            dayView.isHidden = false
-            hourView.isHidden = false
-            minuteView.isHidden = false
+        if let endDateDuration = product.endDate {
+            remainingSeconds = Int(endDateDuration)
+            startTimer()
+            updateCountdownLabels()
+            showCountdownViews(true)
         } else {
-            lotStartInLabel.isHidden = true
-            dayLabel.isHidden = true
-            dayCount.isHidden = true
-            hourLabel.isHidden = true
-            hourCount.isHidden = true
-            minuteLabel.isHidden = true
-            minuteCount.isHidden = true
-            dayView.isHidden = true
-            hourView.isHidden = true
-            minuteView.isHidden = true
+            showCountdownViews(false)
         }
     }
     
-    private func calculateTimeRemaining(endDate: Double) -> (days: Int, hours: Int, minutes: Int) {
-        let currentDate = Date()
-        let endDate = Date(timeIntervalSince1970: endDate)
-        let calendar = Calendar.current
-        let components = calendar.dateComponents([.day, .hour, .minute], from: currentDate, to: endDate)
+    private func startTimer() {
+        timer?.invalidate() 
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            self.remainingSeconds -= 1
+            self.updateCountdownLabels()
+            if self.remainingSeconds <= 0 {
+                self.timer?.invalidate()
+                self.timer = nil
+            }
+        }
+    }
+    
+    private func updateCountdownLabels() {
+        let days = remainingSeconds / (24 * 3600)
+        let hours = (remainingSeconds % (24 * 3600)) / 3600
+        let minutes = (remainingSeconds % 3600) / 60
         
-        let days = max(components.day ?? 0, 0)
-        let hours = max(components.hour ?? 0, 0)
-        let minutes = max(components.minute ?? 0, 0)
-        
-        return (days, hours, minutes)
+        dayCount.text = "\(max(days, 0))"
+        hourCount.text = "\(max(hours, 0))"
+        minuteCount.text = "\(max(minutes, 0))"
+    }
+    
+    private func showCountdownViews(_ isVisible: Bool) {
+        lotStartInLabel.isHidden = !isVisible
+        dayLabel.isHidden = !isVisible
+        dayCount.isHidden = !isVisible
+        hourLabel.isHidden = !isVisible
+        hourCount.isHidden = !isVisible
+        minuteLabel.isHidden = !isVisible
+        minuteCount.isHidden = !isVisible
+        dayView.isHidden = !isVisible
+        hourView.isHidden = !isVisible
+        minuteView.isHidden = !isVisible
     }
 }
