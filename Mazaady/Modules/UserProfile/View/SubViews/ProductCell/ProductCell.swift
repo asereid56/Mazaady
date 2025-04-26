@@ -39,12 +39,12 @@ class ProductCell: UICollectionViewCell {
         productImage.layer.cornerRadius = 20
         productImage.contentMode = .scaleAspectFill
         productImage.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        priceLabel.text = NSLocalizedString("Price", comment: "")
-        offerPriceLabel.text = NSLocalizedString("Offer Price", comment: "")
-        lotStartInLabel.text = NSLocalizedString("Lot Starts In", comment: "")
-        dayLabel.text = NSLocalizedString("D", comment: "")
-        minuteLabel.text = NSLocalizedString("M", comment: "")
-        hourLabel.text = NSLocalizedString("H", comment: "")
+        priceLabel.text = "Price".localized()
+        offerPriceLabel.text = "Offer Price".localized()
+        lotStartInLabel.text = "Lot Starts In".localized()
+        dayLabel.text = "D".localized()
+        minuteLabel.text = "M".localized()
+        hourLabel.text = "H".localized()
         
         dayView.layer.cornerRadius = 14
         dayView.layer.masksToBounds = true

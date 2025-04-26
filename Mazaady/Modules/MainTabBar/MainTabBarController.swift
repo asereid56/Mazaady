@@ -37,11 +37,11 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
     private func setupTabs() {
         let homeVC = UIViewController()
         homeVC.view.backgroundColor = .white
-        homeVC.tabBarItem = UITabBarItem(title: "Home", image: UIImage(named: "home"), tag: 0)
+        homeVC.tabBarItem = UITabBarItem(title: "Home".localized(), image: UIImage(named: "home"), tag: 0)
         
         let searchVC = UIViewController()
         searchVC.view.backgroundColor = .white
-        searchVC.tabBarItem = UITabBarItem(title: "Search", image: UIImage(systemName: "magnifyingglass"), tag: 1)
+        searchVC.tabBarItem = UITabBarItem(title: "Search".localized(), image: UIImage(systemName: "magnifyingglass"), tag: 1)
         
         let storeVC = UIViewController()
         storeVC.view.backgroundColor = .white
@@ -49,7 +49,7 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         
         let cartVC = UIViewController()
         cartVC.view.backgroundColor = .white
-        cartVC.tabBarItem = UITabBarItem(title: "Cart", image: UIImage(named: "bag"), tag: 3)
+        cartVC.tabBarItem = UITabBarItem(title: "Cart".localized(), image: UIImage(named: "bag"), tag: 3)
         
         let userProfileUseCase = UserProfileUseCase()
         let advertisingUseCase = AdvertisementUseCase()
@@ -62,7 +62,7 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
             tagUseCase: tagsUseCase
         )
         let profileVC = ProfileViewController(viewModel: profileViewModel)
-        profileVC.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.fill"), tag: 4)
+        profileVC.tabBarItem = UITabBarItem(title: "Profile".localized(), image: UIImage(systemName: "person.fill"), tag: 4)
         
         viewControllers = [
             homeVC,

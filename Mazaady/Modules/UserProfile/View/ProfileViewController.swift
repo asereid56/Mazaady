@@ -81,13 +81,13 @@ class ProfileViewController: UIViewController {
         productsCollectionView.delegate = self
         productsCollectionView.isScrollEnabled = false
         productsCollectionView.backgroundColor = .clear
-
+        
         let layout = WaterfallLayout()
         layout.delegate = self
         layout.numberOfColumns = 3
         layout.cellPadding = 16
         productsCollectionView.collectionViewLayout = layout
-
+        
         // Prototype cell for dynamic sizing
         prototypeCell = Bundle.main
             .loadNibNamed("ProductCell", owner: nil, options: nil)?
@@ -219,12 +219,16 @@ class ProfileViewController: UIViewController {
     }
     
     private func setupScreenLocalization() {
-        changeLanguageLabel.setTitle(NSLocalizedString("English", comment: ""), for: .normal)
-        followersLabel.text = NSLocalizedString("Followers", comment: "")
-        followingLabel.text = NSLocalizedString("Following", comment: "")
-        productLabel.text = NSLocalizedString("Products", comment: "")
-        reviewLabel.text = NSLocalizedString("Reviews", comment: "")
-        followersButtonLabel.text = NSLocalizedString("Followers", comment: "")
+        if LanguageManager.shared.currentLanguage == "ar" {
+            changeLanguageLabel.setTitle("Arabic".localized(), for: .normal)
+        } else {
+            changeLanguageLabel.setTitle("English".localized(), for: .normal)
+        }
+        followersLabel.text = "Followers".localized(comment: "")
+        followingLabel.text = "Following".localized()
+        productLabel.text = "Products".localized()
+        reviewLabel.text = "Reviews".localized()
+        followersButtonLabel.text = "Followers".localized()
     }
     
     private func setupTapGestures() {
@@ -261,7 +265,7 @@ class ProfileViewController: UIViewController {
             emptyLabel.text = NSLocalizedString("No Reviews Yet", comment: "")
             adsTableView.isHidden = true
             tagsCollectionView.isHidden = true
-
+            
         case .followers:
             followersButtonLabel.textColor = UIColor(named: "Pink100")
             followersLine.isHidden = false
@@ -270,43 +274,16 @@ class ProfileViewController: UIViewController {
             emptyLabel.text = NSLocalizedString("No Followers Yet", comment: "")
             adsTableView.isHidden = true
             tagsCollectionView.isHidden = true
-
+            
         }
     }
     
     private func updateContentViewHeight() {
-        // Calculate Products Collection View Height
-//        productsCollectionView.layoutIfNeeded()
-//        let collectionHeight = productsCollectionView.contentSize.height
-//        
-//        // Calculate Tags Collection View Height
-//        tagsCollectionView.layoutIfNeeded()
-//        let tagsHeight = tagsCollectionView.contentSize.height
-//        
-//        // Calculate Ads Table View Height
-//        let adsCount = viewModel.advertisements.count
-//        let rowHeight: CGFloat = 163 + 16 // Cell height + padding
-//        let adsHeight = CGFloat(adsCount) * rowHeight + adsTableView.contentInset.top + adsTableView.contentInset.bottom
-//        
-        // Update height constraints
         [productsCollectionView, tagsCollectionView, adsTableView].forEach { view in
             guard let view = view else { return }
             view.constraints.filter { $0.firstAttribute == .height }.forEach { $0.constant = view.contentSize.height }
         }
-        
-        // Calculate Total Content Height
         contentView.layoutIfNeeded()
-//        var contentHeight: CGFloat = headerContainer.frame.height + stickyTabsContainer.frame.height
-//        
-//        if viewModel.selectedTab == .products {
-//            // Add heights for tags, products, and ads with appropriate spacing
-//            contentHeight += tagsHeight + collectionHeight + adsHeight + 40
-//        } else {
-//            contentHeight += 40
-//        }
-//        
-//        contentView.frame.size.height = contentHeight
-//        scrollView.contentSize = contentView.frame.size
     }
     
     private func resetAllTabs() {
@@ -347,8 +324,27 @@ class ProfileViewController: UIViewController {
     }
     
     @IBAction func changeLanguageButton(_ sender: Any) {
-        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
-        UIApplication.shared.open(url)
+        let vc = LanguageViewController()
+            vc.modalPresentationStyle = .formSheet
+            vc.onConfirm = { [weak self] langCode in
+                LanguageManager.shared.setLanguage(code: langCode)
+                self?.reloadApplication()
+            }
+            self.present(vc, animated: true)
+    }
+    
+    private func reloadApplication() {
+        guard let window = view.window ?? UIApplication.shared.windows.first else { return }
+        
+        let navController = UINavigationController()
+        navController.view.semanticContentAttribute = LanguageManager.shared.isRTL ? .forceRightToLeft : .forceLeftToRight
+        
+        let newCoordinator = MainCoordinator(navigationController: navController)
+        newCoordinator.start()
+        
+        UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: {
+            window.rootViewController = navController
+        }, completion: nil)
     }
 }
 
@@ -379,11 +375,11 @@ extension ProfileViewController: UICollectionViewDataSource, UICollectionViewDel
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-           if collectionView == tagsCollectionView {
-               viewModel.toggleTagSelection(at: indexPath.item)
-               tagsCollectionView.reloadItems(at: [indexPath])
-           }
-       }
+        if collectionView == tagsCollectionView {
+            viewModel.toggleTagSelection(at: indexPath.item)
+            tagsCollectionView.reloadItems(at: [indexPath])
+        }
+    }
 }
 
 extension ProfileViewController: WaterfallLayoutDelegate {
@@ -402,7 +398,7 @@ extension ProfileViewController: WaterfallLayoutDelegate {
             .widthAnchor
             .constraint(equalToConstant: itemWidth)
         prototypeCell.contentView.addConstraint(widthConstraint)
-
+        
         let targetSize = CGSize(width: itemWidth,
                                 height: UIView.layoutFittingCompressedSize.height)
         let height = prototypeCell.contentView.systemLayoutSizeFitting(
@@ -410,7 +406,7 @@ extension ProfileViewController: WaterfallLayoutDelegate {
             withHorizontalFittingPriority: .required,
             verticalFittingPriority: .fittingSizeLevel
         ).height
-
+        
         prototypeCell.contentView.removeConstraint(widthConstraint)
         return height
     }
@@ -420,7 +416,7 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.advertisements.count
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "advertisementCell", for: indexPath) as! advertisementCell
         let ad = viewModel.advertisements[indexPath.row]
