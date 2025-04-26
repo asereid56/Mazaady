@@ -71,6 +71,7 @@ class ProfileViewController: UIViewController {
         setupScreenLocalization()
         setupCollectionView()
         setupTableView()
+        setupTagsCollectionView()
     }
     
     private func setupCollectionView() {
@@ -81,7 +82,6 @@ class ProfileViewController: UIViewController {
         productsCollectionView.isScrollEnabled = false
         productsCollectionView.backgroundColor = .clear
 
-        // Replace flow layout with our WaterfallLayout
         let layout = WaterfallLayout()
         layout.delegate = self
         layout.numberOfColumns = 3
@@ -92,6 +92,21 @@ class ProfileViewController: UIViewController {
         prototypeCell = Bundle.main
             .loadNibNamed("ProductCell", owner: nil, options: nil)?
             .first as? ProductCell
+    }
+    
+    private func setupTagsCollectionView() {
+        tagsCollectionView.register(UINib(nibName: "TagCell", bundle: nil), forCellWithReuseIdentifier: "TagCell")
+        tagsCollectionView.dataSource = self
+        tagsCollectionView.delegate = self
+        tagsCollectionView.isScrollEnabled = false
+        tagsCollectionView.backgroundColor = .clear
+        
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumInteritemSpacing = 6
+        layout.minimumLineSpacing = 8
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        tagsCollectionView.collectionViewLayout = layout
     }
     
     private func setupTableView() {
@@ -137,7 +152,9 @@ class ProfileViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] selectedTab in
                 self?.updateTabAppearance(for: selectedTab)
-                self?.updateContentViewHeight()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    self?.updateContentViewHeight()
+                }
             }
             .store(in: &cancellables)
         
@@ -145,7 +162,9 @@ class ProfileViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.productsCollectionView.reloadData()
-                self?.updateContentViewHeight()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    self?.updateContentViewHeight()
+                }
             }
             .store(in: &cancellables)
         
@@ -153,7 +172,19 @@ class ProfileViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.adsTableView.reloadData()
-                self?.updateContentViewHeight()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    self?.updateContentViewHeight()
+                }
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$tags
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] tags in
+                self?.tagsCollectionView.reloadData()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    self?.updateContentViewHeight()
+                }
             }
             .store(in: &cancellables)
     }
@@ -165,7 +196,6 @@ class ProfileViewController: UIViewController {
         contentView.backgroundColor = .pink10
         adsTableView.backgroundColor = .clear
         tagsCollectionView.backgroundColor = .clear
-        updateTabAppearance(for: .products)
         viewModel.selectTab(.products)
     }
     
@@ -221,6 +251,7 @@ class ProfileViewController: UIViewController {
             productsCollectionView.isHidden = false
             emptyView.isHidden = true
             adsTableView.isHidden = false
+            tagsCollectionView.isHidden = false
             
         case .reviews:
             reviewLabel.textColor = UIColor(named: "Pink100")
@@ -229,6 +260,7 @@ class ProfileViewController: UIViewController {
             emptyView.isHidden = false
             emptyLabel.text = NSLocalizedString("No Reviews Yet", comment: "")
             adsTableView.isHidden = true
+            tagsCollectionView.isHidden = true
 
         case .followers:
             followersButtonLabel.textColor = UIColor(named: "Pink100")
@@ -237,47 +269,44 @@ class ProfileViewController: UIViewController {
             emptyView.isHidden = false
             emptyLabel.text = NSLocalizedString("No Followers Yet", comment: "")
             adsTableView.isHidden = true
+            tagsCollectionView.isHidden = true
 
         }
     }
     
     private func updateContentViewHeight() {
         // Calculate Products Collection View Height
-        productsCollectionView.layoutIfNeeded()
-        let collectionHeight = productsCollectionView.contentSize.height
-        
-        // Update collection view height constraint
-        if let heightConstraint = productsCollectionView.constraints.first(where: { $0.firstAttribute == .height }) {
-            heightConstraint.constant = collectionHeight
-        } else {
-            productsCollectionView.heightAnchor.constraint(equalToConstant: collectionHeight).isActive = true
-        }
-        
-        // Calculate Ads Table View Height
-        let adsCount = viewModel.advertisements.count
-        let rowHeight: CGFloat = 147 + 16 // Cell height + padding
-        let adsHeight = CGFloat(adsCount) * rowHeight + adsTableView.contentInset.top + adsTableView.contentInset.bottom
-        
-        // Update ads table view height constraint
-        if let adsHeightConstraint = adsTableView.constraints.first(where: { $0.firstAttribute == .height }) {
-            adsHeightConstraint.constant = adsHeight
-        } else {
-            adsTableView.heightAnchor.constraint(equalToConstant: adsHeight).isActive = true
+//        productsCollectionView.layoutIfNeeded()
+//        let collectionHeight = productsCollectionView.contentSize.height
+//        
+//        // Calculate Tags Collection View Height
+//        tagsCollectionView.layoutIfNeeded()
+//        let tagsHeight = tagsCollectionView.contentSize.height
+//        
+//        // Calculate Ads Table View Height
+//        let adsCount = viewModel.advertisements.count
+//        let rowHeight: CGFloat = 163 + 16 // Cell height + padding
+//        let adsHeight = CGFloat(adsCount) * rowHeight + adsTableView.contentInset.top + adsTableView.contentInset.bottom
+//        
+        // Update height constraints
+        [productsCollectionView, tagsCollectionView, adsTableView].forEach { view in
+            guard let view = view else { return }
+            view.constraints.filter { $0.firstAttribute == .height }.forEach { $0.constant = view.contentSize.height }
         }
         
         // Calculate Total Content Height
         contentView.layoutIfNeeded()
-        var contentHeight: CGFloat = headerContainer.frame.height +
-                                    stickyTabsContainer.frame.height
-        
-        if viewModel.selectedTab == .products {
-            contentHeight += adsHeight + collectionHeight + 40
-        } else {
-            contentHeight += 40 // Empty view padding
-        }
-        
-        contentView.frame.size.height = contentHeight
-        scrollView.contentSize = contentView.frame.size
+//        var contentHeight: CGFloat = headerContainer.frame.height + stickyTabsContainer.frame.height
+//        
+//        if viewModel.selectedTab == .products {
+//            // Add heights for tags, products, and ads with appropriate spacing
+//            contentHeight += tagsHeight + collectionHeight + adsHeight + 40
+//        } else {
+//            contentHeight += 40
+//        }
+//        
+//        contentView.frame.size.height = contentHeight
+//        scrollView.contentSize = contentView.frame.size
     }
     
     private func resetAllTabs() {
@@ -327,15 +356,34 @@ class ProfileViewController: UIViewController {
 // MARK: - UICollectionViewDataSource & Delegate
 extension ProfileViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.products.count
+        if collectionView == productsCollectionView {
+            return viewModel.products.count
+        } else {
+            return viewModel.tags.count
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProductCell", for: indexPath) as! ProductCell
-        let product = viewModel.products[indexPath.item]
-        cell.configure(with: product)
-        return cell
+        if collectionView == productsCollectionView {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProductCell", for: indexPath) as! ProductCell
+            let product = viewModel.products[indexPath.item]
+            cell.configure(with: product)
+            return cell
+        } else if collectionView == tagsCollectionView {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TagCell", for: indexPath) as! TagCell
+            let tag = viewModel.tags[indexPath.item]
+            cell.configure(with: tag.name, isSelected: viewModel.isTagSelected(at: indexPath.item))
+            return cell
+        }
+        return UICollectionViewCell()
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+           if collectionView == tagsCollectionView {
+               viewModel.toggleTagSelection(at: indexPath.item)
+               tagsCollectionView.reloadItems(at: [indexPath])
+           }
+       }
 }
 
 extension ProfileViewController: WaterfallLayoutDelegate {
@@ -382,5 +430,28 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 163
+    }
+}
+
+extension ProfileViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if collectionView == tagsCollectionView  {
+            
+            let tag = viewModel.tags[indexPath.item]
+            let font = UIFont.systemFont(ofSize: 14, weight: .medium)
+            let attributes: [NSAttributedString.Key: Any] = [.font: font]
+            
+            let textWidth = (tag.name as NSString)
+                .size(withAttributes: attributes)
+                .width
+            
+            return CGSize(
+                width: textWidth + 16,
+                height: 24
+            )
+        }
+        return CGSize(width: 100, height: 100)
     }
 }

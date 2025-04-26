@@ -15,6 +15,7 @@ class ProfileViewModel: ObservableObject {
     @Published private(set) var tags: [Tag] = []
     @Published private(set) var isLoading: Bool = false
     @Published private(set) var errorMessage: String?
+    @Published private var selectedTagIndices = Set<Int>()
     @Published var selectedTab: SelectedTab = .products {
         didSet {
             if selectedTab == .products {
@@ -143,5 +144,17 @@ class ProfileViewModel: ObservableObject {
     
     func selectTab(_ tab: SelectedTab) {
         selectedTab = tab
+    }
+    
+    func isTagSelected(at index: Int) -> Bool {
+        selectedTagIndices.contains(index)
+    }
+
+    func toggleTagSelection(at index: Int) {
+        if selectedTagIndices.contains(index) {
+            selectedTagIndices.remove(index)
+        } else {
+            selectedTagIndices.insert(index)
+        }
     }
 }
