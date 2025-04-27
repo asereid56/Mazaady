@@ -361,6 +361,7 @@
                             </subviews>
                         </stackView>
                     </subviews>
+                    <color key="backgroundColor" name="Pink10"/>
                 </stackView>
                 <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="UD6-YB-EoW">
                     <rect key="frame" x="16" y="409.33333333333331" width="313" height="34"/>

@@ -45,7 +45,7 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var headerContainer: UIStackView!
     @IBOutlet weak var stickyTabsContainer: UIStackView!
     @IBOutlet weak var contentView: UIView!
-    
+        
     @IBOutlet weak var searchView: UISearchBar!
     @IBOutlet weak var searchButton: UIButton!
     
@@ -76,6 +76,15 @@ class ProfileViewController: UIViewController {
         setupTableView()
         setupTagsCollectionView()
         setupRefreshControl()
+        scrollView.delegate = self
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        if originalTabsFrame == .zero {
+            originalTabsFrame = stickyTabsContainer.frame
+        }
     }
     
     private func setupCollectionView() {
@@ -419,6 +428,54 @@ class ProfileViewController: UIViewController {
         }, completion: nil)
     }
 }
+
+extension ProfileViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let stickyTabsOriginalY = originalTabsFrame.origin.y
+        
+        if offsetY >= stickyTabsOriginalY {
+            // Stick to the top
+            if stickyTabsContainer.superview != self.view {
+                stickyTabsContainer.removeFromSuperview()
+                stickyTabsContainer.translatesAutoresizingMaskIntoConstraints = false
+                self.view.addSubview(stickyTabsContainer)
+
+                NSLayoutConstraint.activate([
+                    stickyTabsContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                    stickyTabsContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                    stickyTabsContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                    searchView.topAnchor.constraint(equalTo: headerContainer.bottomAnchor, constant: 83),
+                    searchView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+                    searchView.trailingAnchor.constraint(equalTo: searchButton.leadingAnchor)
+                ])
+                
+                searchView.isHidden = true
+                searchButton.isHidden = true
+            }
+        } else {
+            // Return back to contentView
+            if stickyTabsContainer.superview != contentView {
+                stickyTabsContainer.removeFromSuperview()
+                stickyTabsContainer.translatesAutoresizingMaskIntoConstraints = false
+                contentView.addSubview(stickyTabsContainer)
+                
+                NSLayoutConstraint.activate([
+                    stickyTabsContainer.topAnchor.constraint(equalTo: headerContainer.bottomAnchor, constant: 32),
+                    stickyTabsContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+                    stickyTabsContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 16),
+                    searchView.topAnchor.constraint(equalTo: stickyTabsContainer.bottomAnchor, constant: 16),
+                    searchView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+                    searchView.trailingAnchor.constraint(equalTo: searchButton.leadingAnchor)
+                ])
+                
+                searchView.isHidden = false
+                searchButton.isHidden = false
+            }
+        }
+    }
+}
+
 
 
 // MARK: - UICollectionViewDataSource & Delegate
