@@ -318,7 +318,7 @@ class ProfileViewController: UIViewController {
             reviewLine.isHidden = false
             productsCollectionView.isHidden = true
             emptyView.isHidden = false
-            emptyLabel.text = NSLocalizedString("No Reviews Yet", comment: "")
+            emptyLabel.text = "No Reviews Yet".localized()
             adsTableView.isHidden = true
             tagsCollectionView.isHidden = true
             
@@ -327,7 +327,7 @@ class ProfileViewController: UIViewController {
             followersLine.isHidden = false
             productsCollectionView.isHidden = true
             emptyView.isHidden = false
-            emptyLabel.text = NSLocalizedString("No Followers Yet", comment: "")
+            emptyLabel.text = "No Followers Yet".localized()
             adsTableView.isHidden = true
             tagsCollectionView.isHidden = true
             
