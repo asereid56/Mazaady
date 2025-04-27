@@ -51,17 +51,7 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         cartVC.view.backgroundColor = .white
         cartVC.tabBarItem = UITabBarItem(title: "Cart".localized(), image: UIImage(named: "bag"), tag: 3)
         
-        let userProfileUseCase = UserProfileUseCase()
-        let advertisingUseCase = AdvertisementUseCase()
-        let tagsUseCase = TagUseCase()
-        let productUseCase = ProductUseCase()
-        let profileViewModel = ProfileViewModel(
-            userUseCase: userProfileUseCase,
-            productUseCase: productUseCase,
-            advertismentUseCase: advertisingUseCase,
-            tagUseCase: tagsUseCase
-        )
-        let profileVC = ProfileViewController(viewModel: profileViewModel)
+        let profileVC = ProfileRouter.create()
         profileVC.tabBarItem = UITabBarItem(title: "Profile".localized(), image: UIImage(systemName: "person.fill"), tag: 4)
         
         viewControllers = [

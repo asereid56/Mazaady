@@ -52,7 +52,7 @@ class ProfileViewController: UIViewController {
     // MARK: - Properties
     private var cancellables: Set<AnyCancellable> = []
     private var originalTabsFrame: CGRect = .zero
-    let viewModel: ProfileViewModel
+    let viewModel: ProfileViewModel!
     private var prototypeCell: ProductCell?
     
     init(viewModel: ProfileViewModel) {
@@ -421,17 +421,26 @@ class ProfileViewController: UIViewController {
     }
     
     @IBAction func changeLanguageButton(_ sender: Any) {
-        let vc = LanguageViewController()
-            vc.modalPresentationStyle = .formSheet
-            vc.onConfirm = { [weak self] langCode in
-                LanguageManager.shared.setLanguage(code: langCode)
-                self?.reloadApplication()
-            }
-            self.present(vc, animated: true)
+        viewModel.navigateToLanguagesSelection { [weak self] langCode in
+            LanguageManager.shared.setLanguage(code: langCode)
+            self?.reloadApplication()
+        }
     }
     
     private func reloadApplication() {
-        guard let window = view.window ?? UIApplication.shared.windows.first else { return }
+        let window: UIWindow? = {
+            if #available(iOS 15.0, *) {
+                return UIApplication.shared.connectedScenes
+                    .compactMap { $0 as? UIWindowScene }
+                    .first?
+                    .windows
+                    .first(where: \.isKeyWindow)
+            } else {
+                return view.window ?? UIApplication.shared.windows.first(where: \.isKeyWindow)
+            }
+        }()
+        
+        guard let window = window else { return }
         
         let navController = UINavigationController()
         navController.view.semanticContentAttribute = LanguageManager.shared.isRTL ? .forceRightToLeft : .forceLeftToRight

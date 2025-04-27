@@ -7,20 +7,16 @@
 
 import Foundation
 
-// TODO: - Handle Arabic Font
-
 struct CustomFont {
     private struct PrimaryEnglishFontName {
         static let regularFont = "Nunito-Regular"
         static let boldFont = "Nunito-Bold"
     }
-
     
     enum FontName {
 
         case title
         case body
-
         
         var localized: String {
             

@@ -11,6 +11,7 @@ import Realm
 import RealmSwift
 
 class ProfileViewModel: ObservableObject {
+    private let router: ProfileRouter
     @Published private(set) var profile: ProfileEntity?
     @Published private(set) var products: [ProductEntity] = []
     @Published private(set) var advertisements: [Advertisement] = []
@@ -44,6 +45,7 @@ class ProfileViewModel: ObservableObject {
     private let tagUseCase: TagUseCase
     
     init(
+        router: ProfileRouter,
         userUseCase: UserProfileUseCase,
         productUseCase: ProductUseCase,
         advertismentUseCase: AdvertisementUseCase,
@@ -53,6 +55,7 @@ class ProfileViewModel: ObservableObject {
         self.productUseCase = productUseCase
         self.advertismentUseCase = advertismentUseCase
         self.tagUseCase = tagUseCase
+        self.router = router
     }
     
     func fetchProfile() {
@@ -192,5 +195,9 @@ class ProfileViewModel: ObservableObject {
         } else {
             selectedTagIndices.insert(index)
         }
+    }
+    
+    func navigateToLanguagesSelection(onConfirm: @escaping (String) -> Void) {
+        router.navigateToLanguageSelection(onConfirm: onConfirm)
     }
 }
