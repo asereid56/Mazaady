@@ -76,6 +76,7 @@ class ProfileViewController: UIViewController {
         setupTableView()
         setupTagsCollectionView()
         setupRefreshControl()
+        setupFonts()
         scrollView.delegate = self
     }
     
@@ -261,14 +262,29 @@ class ProfileViewController: UIViewController {
     private func setupScreenLocalization() {
         if LanguageManager.shared.currentLanguage == "ar" {
             changeLanguageLabel.setTitle("Arabic".localized(), for: .normal)
+            changeLanguageLabel.applyFont(name: .body, size: .large)
         } else {
             changeLanguageLabel.setTitle("English".localized(), for: .normal)
+            changeLanguageLabel.applyFont(name: .body, size: .large)
         }
         followersLabel.text = "Followers".localized(comment: "")
         followingLabel.text = "Following".localized()
         productLabel.text = "Products".localized()
         reviewLabel.text = "Reviews".localized()
         followersButtonLabel.text = "Followers".localized()
+    }
+    
+    private func setupFonts() {
+        userProfileName.applyFont(name: .title, size: .xLarge)
+        userProfileUserName.applyFont(name: .body, size: .medium)
+        userProfileCity.applyFont(name: .body, size: .small)
+        userFollowersCount.applyFont(name: .title, size: .medium)
+        userFollowingCount.applyFont(name: .title, size: .medium)
+        followersLabel.applyFont(name: .body, size: .small)
+        followingLabel.applyFont(name: .body, size: .small)
+        productLabel.applyFont(name: .title, size: .medium)
+        reviewLabel.applyFont(name: .title, size: .medium)
+        followersButtonLabel.applyFont(name: .title, size: .medium)
     }
     
     private func setupTapGestures() {

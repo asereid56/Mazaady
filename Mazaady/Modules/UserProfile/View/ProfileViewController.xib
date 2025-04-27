@@ -77,22 +77,22 @@
                                             </constraints>
                                         </imageView>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="ABO-YT-fA0">
-                                            <rect key="frame" x="77" y="102.33333333333334" width="207" height="53"/>
+                                            <rect key="frame" x="83.333333333333329" y="102.33333333333334" width="194.66666666666669" height="53"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@AhmedMohamed1995" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l2k-YZ-uJt">
-                                                    <rect key="frame" x="0.0" y="0.0" width="207" height="21.666666666666668"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="194.66666666666666" height="21.666666666666668"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <color key="textColor" name="Black80"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@AhmedMohamed1995" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6qF-GA-okW">
-                                                    <rect key="frame" x="26" y="21.666666666666657" width="155" height="17"/>
+                                                    <rect key="frame" x="19.666666666666671" y="21.666666666666657" width="155" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ahmed Mohammed" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n61-jN-hI0">
-                                                    <rect key="frame" x="48.666666666666664" y="38.666666666666657" width="109.66666666666669" height="14.333333333333336"/>
+                                                    <rect key="frame" x="42.333333333333321" y="38.666666666666657" width="109.66666666666669" height="14.333333333333336"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" name="Gray10"/>
                                                     <nil key="highlightedColor"/>
